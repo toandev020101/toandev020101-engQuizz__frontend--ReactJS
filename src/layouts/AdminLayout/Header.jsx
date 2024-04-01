@@ -39,32 +39,35 @@ const Header = () => {
   };
   // menu
 
-  // useEffect(() => {
-  //   const timeId = setTimeout(() => {
-  //     navigate('/dang-nhap', {
-  //       state: {
-  //         notify: {
-  //           type: 'error',
-  //           message: 'Vui lòng đăng nhập!',
-  //           options: { theme: 'colored', toastId: 'authId', autoClose: 1500 },
-  //         },
-  //       },
-  //     });
-  //   }, 1000);
+  useEffect(() => {
+    const timeId = setTimeout(() => {
+      navigate('/dang-nhap', {
+        state: {
+          notify: {
+            type: 'error',
+            message: 'Vui lòng đăng nhập!',
+            options: { theme: 'colored', toastId: 'authId', autoClose: 1500 },
+          },
+        },
+      });
+    }, 1000);
 
-  //   if (isAuthenticated) {
-  //     clearTimeout(timeId);
-  //   }
+    if (isAuthenticated) {
+      clearTimeout(timeId);
+    }
 
-  //   return () => clearTimeout(timeId);
-  // }, [navigate, isAuthenticated]);
+    return () => clearTimeout(timeId);
+  }, [navigate, isAuthenticated]);
 
   useEffect(() => {
     const getUser = async () => {
       try {
         const userId = JWTManager.getUserId();
         const res = await UserApi.getOneById(userId);
-        const newUser = res.result.data;
+        const newUser = res.data.user;
+        if (!newUser.is_admin) {
+          navigate('/error/403');
+        }
         setUser(newUser);
       } catch (error) {
         const { status, data } = error.response;

@@ -45,7 +45,7 @@ const JWTManager = () => {
     try {
       // call api refresh token
       const res = await AuthApi.refreshToken();
-      setToken(res.result.access_token);
+      setToken(res.data.access_token);
       return true;
     } catch (error) {
       deleteToken();

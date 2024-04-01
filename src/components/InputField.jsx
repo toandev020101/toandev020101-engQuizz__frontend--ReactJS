@@ -12,9 +12,9 @@ const InputField = (props) => {
       name={name}
       control={form.control}
       render={({
-                 field: { onChange, onBlur, value, name, ref },
-                 fieldState: { invalid, error },
-               }) => (
+        field: { onChange, onBlur, value, name, ref },
+        fieldState: { invalid, error },
+      }) => (
         <Box position="relative" width="100%">
           <TextField
             onBlur={onBlur} // notify when input is touched

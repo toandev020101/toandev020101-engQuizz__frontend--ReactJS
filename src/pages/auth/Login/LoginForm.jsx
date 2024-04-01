@@ -29,11 +29,11 @@ const LoginForm = () => {
     setIsLoading(true);
     try {
       let res = await AuthApi.login(values);
-      const user = res.result.data;
-      JWTManager.setToken(res.result.access_token);
+      const user = res.data.user;
+      JWTManager.setToken(res.data.access_token);
       setIsAuthenticated(true);
 
-      navigate(user.role.code === 'student' ? '/' : '/quan-tri', {
+      navigate(!user.is_admin ? '/' : '/quan-tri', {
         state: {
           notify: {
             type: 'success',
@@ -51,7 +51,11 @@ const LoginForm = () => {
           form.setError('email', { type: 'manual', message: data.detail });
           form.setError('password', { type: 'manual', message: data.detail });
         }
-        toast.error('Đăng nhập thất bại!', { theme: 'colored', toastId: 'authId', autoClose: 1500 });
+        toast.error('Đăng nhập thất bại!', {
+          theme: 'colored',
+          toastId: 'authId',
+          autoClose: 1500,
+        });
       } else {
         navigate(`/error/${status}`);
       }
@@ -63,15 +67,18 @@ const LoginForm = () => {
     <Box component={'form'} onSubmit={form.handleSubmit(handleSubmit)}>
       <InputField name="email" label="Email" form={form} type="email" required />
       <InputField name="password" label="Mật khẩu" form={form} type="password" required />
-      <Link to={'/quen-mat-khau'}
-            style={{
-              textDecoration: 'none',
-              textAlign: 'right',
-              display: 'block',
-              fontSize: '14px',
-              color: theme.palette.primary.main,
-            }}>Quên mật
-        khẩu ?</Link>
+      <Link
+        to={'/quen-mat-khau'}
+        style={{
+          textDecoration: 'none',
+          textAlign: 'right',
+          display: 'block',
+          fontSize: '14px',
+          color: theme.palette.primary.main,
+        }}
+      >
+        Quên mật khẩu ?
+      </Link>
       <LoadingButton
         variant="contained"
         loading={isLoading}

@@ -11,12 +11,15 @@ const AuthLayout = ({ children }) => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuthContext();
 
-
   useEffect(() => {
     const getUser = async () => {
       const res = await UserApi.getOneById(JWTManager.getUserId());
-      const user = res.result.data;
-      navigate(user.role.code === 'student' ? '/' : '/quan-tri');
+      const user = res.data.user;
+      if (user.is_verified) {
+        navigate(!user.is_admin ? '/' : '/quan-tri');
+      } else {
+        navigate('/xac-minh-email');
+      }
     };
 
     if (isAuthenticated) {
@@ -42,8 +45,16 @@ const AuthLayout = ({ children }) => {
         alt="mask_light"
         style={{ position: 'absolute', bottom: 0, left: 0, width: '100vw' }}
       />
-      <img src="/images/auth-v1-tree.png" alt="tree_1" style={{ position: 'absolute', bottom: 0, left: 0 }} />
-      <img src="/images/auth-v1-tree-2.png" alt="tree_2" style={{ position: 'absolute', bottom: 0, right: 0 }} />
+      <img
+        src="/images/auth-v1-tree.png"
+        alt="tree_1"
+        style={{ position: 'absolute', bottom: 0, left: 0 }}
+      />
+      <img
+        src="/images/auth-v1-tree-2.png"
+        alt="tree_2"
+        style={{ position: 'absolute', bottom: 0, right: 0 }}
+      />
     </Box>
   );
 };

@@ -58,8 +58,8 @@ const Sidebar = () => {
       icon: <BiBell />,
     },
     {
-      slug: 'nguoi-dung',
-      name: 'Quản lý người dùng',
+      slug: 'tai-khoan',
+      name: 'Quản lý tài khoản',
       icon: <BiUserPin />,
     },
   ];

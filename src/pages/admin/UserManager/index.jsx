@@ -1,7 +1,5 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Typography, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import * as UserApi from '../../../apis/userApi';
@@ -9,7 +7,6 @@ import RemoveDialog from '../../../components/RemoveDialog';
 import TitlePage from '../../../components/TitlePage';
 import { useAuthContext } from '../../../contexts/authContext';
 import JWTManager from '../../../utils/jwt';
-import AddOrEditDialog from './AddOrEditDialog';
 import Header from './Header';
 import TableContent from './TableContent';
 
@@ -24,25 +21,24 @@ const UserManager = () => {
   const [rows, setRows] = useState([]);
   const [total, setTotal] = useState(0);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [openHandleDialog, setOpenHandleDialog] = useState(null);
-  const [handleIndex, setHandleIndex] = useState(-1);
   const [deleteRowIndex, setDeleteRowIndex] = useState(-1);
   const [searchTerm, setSearchTerm] = useState('');
 
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const [reload, setReload] = useState(false);
-  // const [isVerifiedFilter, setIsVerifiedFilter] = useState('all');
+  const [genderFilter, setGenderFilter] = useState('all');
+  const [isAdminFilter, setIsAdminFilter] = useState('all');
 
   const { isAuthenticated } = useAuthContext();
 
   const headCells = [
     // các thành phần trên header
     {
-      label: 'ID', // chữ hiển thị
-      key: 'id', // key dùng để lấy value
-      numeric: false, // là chữ số
-      width: 60, // độ rộng của cột
+      label: 'ID',
+      key: 'id',
+      numeric: false,
+      width: 60,
     },
     {
       label: 'Ảnh đại diện',
@@ -63,26 +59,27 @@ const UserManager = () => {
       width: 150,
     },
     {
-      label: 'Xác minh email',
-      key: 'is_verified',
-      numeric: false,
-      width: 160,
-    },
-    {
-      label: 'Vai trò',
-      key: 'role',
+      label: 'Giới tính',
+      key: 'gender',
       numeric: false,
       width: 120,
     },
     {
-      label: 'Ngày cập nhật',
-      key: 'modified_at',
+      label: 'Ngày sinh',
+      key: 'birth_day',
       numeric: false,
       width: 180,
     },
     {
+      label: 'Vai trò',
+      key: 'is_admin',
+      numeric: false,
+    },
+
+    {
       label: 'Thao tác',
       numeric: false,
+      width: 120,
     },
   ];
 
@@ -97,16 +94,16 @@ const UserManager = () => {
           _limit: rowsPerPage,
           _page: page,
           searchTerm,
-          // isVerified: isVerifiedFilter,
+          gender: genderFilter,
+          isAdmin: isAdminFilter,
         });
 
-        const { data, total } = res.result;
-        let newRows = data;
+        const { users, total } = res.data;
 
-        if (newRows.length === 0 && page > 0) {
+        if (users.length === 0 && page > 0) {
           setPage((prevPage) => prevPage - 1);
         }
-        setRows(newRows);
+        setRows(users);
         setTotal(total);
       } catch (error) {
         const { status, data } = error.response;
@@ -123,70 +120,7 @@ const UserManager = () => {
       getPagination();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, rowsPerPage, reload, isAuthenticated, navigate]);
-
-  const form = useForm({
-    defaultValues: {
-      code: '',
-      name: '',
-    },
-    resolver: yupResolver(),
-  });
-
-  const handleOpenAddDialog = () => {
-    setOpenHandleDialog('add');
-    form.setValue('code', '');
-    form.setValue('name', '');
-  };
-
-  const handleOpenEditDialog = (e, index) => {
-    e.stopPropagation();
-    setOpenHandleDialog('edit');
-    setHandleIndex(index);
-    form.setValue('code', rows[index].code);
-    form.setValue('name', rows[index].name);
-  };
-
-  const handleSubmit = async (values) => {
-    try {
-      let res;
-      if (openHandleDialog === 'edit') {
-        res = await UserApi.updateOne(rows[handleIndex].id, values);
-      } else {
-        res = await UserApi.addOne(values);
-      }
-
-      toast.success(res.detail, {
-        theme: 'colored',
-        toastId: 'headerId',
-        autoClose: 1500,
-      });
-      setOpenHandleDialog(null);
-      setHandleIndex(-1);
-      setReload(!reload);
-      form.reset();
-    } catch (error) {
-      const { status, data } = error.response;
-      if (status === 400 || status === 403) {
-        if (status === 400) {
-          form.setError('code', { type: 'manual', message: data.detail });
-        }
-
-        toast.error(`${openHandleDialog === 'add' ? 'Thêm' : 'Chỉnh sửa'} tài khoản thất bại!`, {
-          theme: 'colored',
-          toastId: 'headerId',
-          autoClose: 1500,
-        });
-      } else {
-        navigate(`/error/${status}`);
-      }
-    }
-  };
-
-  const handleDialogClose = () => {
-    setOpenHandleDialog(null);
-    setHandleIndex(-1);
-  };
+  }, [page, rowsPerPage, reload, isAuthenticated, navigate, genderFilter, isAdminFilter]);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -279,6 +213,25 @@ const UserManager = () => {
     }, 500);
   };
 
+  const handleChangeIsAdmin = async (e, idx) => {
+    e.stopPropagation();
+    try {
+      const newIsAdmin = e.target.checked;
+      const res = await UserApi.changeIsAdmin({ id: rows[idx].id, is_admin: newIsAdmin });
+      const newRows = [...rows];
+      newRows[idx].is_admin = newIsAdmin;
+      setRows(newRows);
+      toast.success(res.detail, { theme: 'colored', toastId: 'headerId', autoClose: 1500 });
+    } catch (error) {
+      const { status, data } = error.response;
+      if (status === 400 || status === 404) {
+        toast.error(data.detail, { theme: 'colored', toastId: 'headerId', autoClose: 1500 });
+      } else {
+        navigate(`/error/${status}`);
+      }
+    }
+  };
+
   return (
     <Box>
       <TitlePage title="EngQuizz - Quản lý tài khoản" />
@@ -305,25 +258,35 @@ const UserManager = () => {
         <Header
           searchTerm={searchTerm}
           handleSearchChange={handleSearchChange}
-          filters={
-            [
-              // {
-              //   value: isVerifiedFilter,
-              //   label: 'Xác minh email',
-              //   handleChange: (e) => setIsVerifiedFilter(e.target.value),
-              //   options: [
-              //     { value: 'all', label: 'Tất cả' },
-              //     { value: 'true', label: 'Đã xác minh' },
-              //     {
-              //       value: 'false',
-              //       label: 'Chưa xác minh',
-              //     },
-              //   ],
-              // },
-            ]
-          }
+          filters={[
+            {
+              value: genderFilter,
+              label: 'Giới tính',
+              handleChange: (e) => setGenderFilter(e.target.value),
+              options: [
+                { value: 'all', label: 'Tất cả' },
+                { value: 'Nam', label: 'Nam' },
+                {
+                  value: 'Nữ',
+                  label: 'Nữ',
+                },
+              ],
+            },
+            {
+              value: isAdminFilter,
+              label: 'Vai trò',
+              handleChange: (e) => setIsAdminFilter(e.target.value),
+              options: [
+                { value: 'all', label: 'Tất cả' },
+                { value: 'true', label: 'Quản trị viên' },
+                {
+                  value: 'false',
+                  label: 'Học viên',
+                },
+              ],
+            },
+          ]}
           selectedArr={selectedArr}
-          handleOpenAddDialog={handleOpenAddDialog}
           handleDeleteRowIndex={handleDeleteRowIndex}
         />
 
@@ -336,19 +299,12 @@ const UserManager = () => {
           rowsPerPage={rowsPerPage}
           isSelected={isSelected}
           handleRowClick={handleRowClick}
-          handleOpenEditDialog={handleOpenEditDialog}
           handleDeleteRowIndex={handleDeleteRowIndex}
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
+          handleChangeIsAdmin={handleChangeIsAdmin}
           total={total}
           page={page}
-        />
-
-        <AddOrEditDialog
-          form={form}
-          openDialog={openHandleDialog}
-          handleClose={handleDialogClose}
-          handleSubmit={handleSubmit}
         />
 
         <RemoveDialog

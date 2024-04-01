@@ -12,34 +12,19 @@ export const register = (data) => {
   return axiosClient.post(url, data);
 };
 
-export const refreshOTP = (data) => {
-  const url = `${BASE_LINK}/refresh-otp`;
-  return axiosClient.post(url, data);
+export const verifyEmail = ({ token }) => {
+  const url = `${BASE_LINK}/verify-email/${token}`;
+  return axiosClient.get(url);
 };
 
-export const verifyEmail = (data) => {
-  const url = `${BASE_LINK}/verify-email`;
-  return axiosClient.post(url, data);
+export const resendEmail = ({ userId }) => {
+  const url = `${BASE_LINK}/resend-email/${userId}`;
+  return axiosClient.get(url);
 };
 
 export const refreshToken = () => {
   const url = `${BASE_LINK}/refresh-token`;
   return axiosClient.get(url);
-};
-
-export const sendOTPPassword = (data) => {
-  const url = `${BASE_LINK}/send-otp-password`;
-  return axiosClient.post(url, data);
-};
-
-export const verifyOTPPassword = (data) => {
-  const url = `${BASE_LINK}/verify-otp-password`;
-  return axiosClient.post(url, data);
-};
-
-export const forgotPassword = (data) => {
-  const url = `${BASE_LINK}/forgot-password`;
-  return axiosClient.post(url, data);
 };
 
 export const logout = () => {
