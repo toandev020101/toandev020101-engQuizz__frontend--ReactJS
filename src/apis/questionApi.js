@@ -1,9 +1,9 @@
 import axiosClient from './axiosClient';
 
-const BASE_LINK = '/user';
+const BASE_LINK = '/question';
 
-export const getPagination = ({ _limit, _page, searchTerm, gender, isAdmin }) => {
-  const url = `${BASE_LINK}?_page=${_page}&_limit=${_limit}&search_term=${searchTerm}&gender=${gender}&is_admin=${isAdmin}`;
+export const getPagination = ({ _limit, _page, searchTerm, level }) => {
+  const url = `${BASE_LINK}?_page=${_page}&_limit=${_limit}&search_term=${searchTerm}&level=${level}`;
   return axiosClient.get(url);
 };
 
@@ -17,14 +17,14 @@ export const addOne = (data) => {
   return axiosClient.post(url, data);
 };
 
+export const addList = (data) => {
+  const url = `${BASE_LINK}/any`;
+  return axiosClient.post(url, data);
+};
+
 export const updateOne = ({ id, data }) => {
   const url = `${BASE_LINK}/${id}`;
   return axiosClient.put(url, data);
-};
-
-export const changeIsAdmin = ({ id, is_admin }) => {
-  const url = `${BASE_LINK}/${id}`;
-  return axiosClient.patch(url, { is_admin });
 };
 
 export const removeOne = (id) => {

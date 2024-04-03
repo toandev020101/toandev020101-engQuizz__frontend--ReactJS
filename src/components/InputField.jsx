@@ -5,7 +5,18 @@ import { BiHide, BiShowAlt } from 'react-icons/bi';
 
 const InputField = (props) => {
   const [showPassword, setShowPassword] = useState(false);
-  const { form, name, label, required, type, fix, readonly, ...others } = props;
+  const {
+    form,
+    name,
+    label,
+    required,
+    type,
+    fix,
+    readonly,
+    onHandleChange,
+    errorMessage,
+    ...others
+  } = props;
 
   return (
     <Controller
@@ -30,8 +41,8 @@ const InputField = (props) => {
             }
             fullWidth
             {...others}
-            error={invalid}
-            helperText={error?.message}
+            error={invalid || errorMessage}
+            helperText={error?.message || errorMessage}
             type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
             sx={{
               '& .MuiOutlinedInput-root': {

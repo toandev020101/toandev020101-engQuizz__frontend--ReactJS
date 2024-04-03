@@ -2,15 +2,15 @@ import { Box, Typography, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import * as UserApi from '../../../apis/userApi';
-import RemoveDialog from '../../../components/RemoveDialog';
-import TitlePage from '../../../components/TitlePage';
-import { useAuthContext } from '../../../contexts/authContext';
-import JWTManager from '../../../utils/jwt';
+import * as QuestionApi from '../../../../apis/questionApi';
+import RemoveDialog from '../../../../components/RemoveDialog';
+import TitlePage from '../../../../components/TitlePage';
+import { useAuthContext } from '../../../../contexts/authContext';
+import JWTManager from '../../../../utils/jwt';
 import Header from './Header';
 import TableContent from './TableContent';
 
-const UserManager = () => {
+const QuestionManager = () => {
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -27,8 +27,7 @@ const UserManager = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const [reload, setReload] = useState(false);
-  const [genderFilter, setGenderFilter] = useState('all');
-  const [isAdminFilter, setIsAdminFilter] = useState('all');
+  const [levelFilter, setLevelFilter] = useState('all');
 
   const { isAuthenticated } = useAuthContext();
 
@@ -41,39 +40,39 @@ const UserManager = () => {
       width: 60,
     },
     {
-      label: 'Ảnh đại diện',
-      key: 'avatar',
+      label: 'Nội dung',
+      key: 'content',
       numeric: false,
-      width: 130,
     },
     {
-      label: 'Họ và tên',
-      key: 'fullname',
+      label: 'Độ khó',
+      key: 'level',
       numeric: false,
-      width: 120,
+      width: 100,
     },
     {
-      label: 'Email',
-      key: 'email',
+      label: 'Câu trả lời 1',
+      key: 'content_1',
       numeric: false,
       width: 150,
     },
     {
-      label: 'Giới tính',
-      key: 'gender',
+      label: 'Câu trả lời 2',
+      key: 'content_2',
       numeric: false,
-      width: 120,
+      width: 150,
     },
     {
-      label: 'Ngày sinh',
-      key: 'birth_day',
+      label: 'Câu trả lời 3',
+      key: 'content_3',
       numeric: false,
-      width: 180,
+      width: 150,
     },
     {
-      label: 'Vai trò',
-      key: 'is_admin',
+      label: 'Câu trả lời 4',
+      key: 'content_4',
       numeric: false,
+      width: 150,
     },
 
     {
@@ -90,20 +89,19 @@ const UserManager = () => {
     const getPagination = async () => {
       setIsLoading(true);
       try {
-        const res = await UserApi.getPagination({
+        const res = await QuestionApi.getPagination({
           _limit: rowsPerPage,
           _page: page,
           searchTerm,
-          gender: genderFilter,
-          isAdmin: isAdminFilter,
+          level: levelFilter,
         });
 
-        const { users, total } = res.data;
+        const { questions, total } = res.data;
 
-        if (users.length === 0 && page > 0) {
+        if (questions.length === 0 && page > 0) {
           setPage((prevPage) => prevPage - 1);
         }
-        setRows(users);
+        setRows(questions);
         setTotal(total);
       } catch (error) {
         const { status, data } = error.response;
@@ -120,16 +118,11 @@ const UserManager = () => {
       getPagination();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, rowsPerPage, reload, isAuthenticated, navigate, genderFilter, isAdminFilter]);
+  }, [page, rowsPerPage, reload, isAuthenticated, navigate, levelFilter]);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      let newSelectedArr = rows.map((row) => {
-        if (row.id !== JWTManager.getUserId()) {
-          return row.id;
-        }
-        return undefined;
-      });
+      let newSelectedArr = rows.map((row) => row.id);
       newSelectedArr = newSelectedArr.filter((selected) => selected !== undefined);
       setSelectedArr(newSelectedArr);
       return;
@@ -181,9 +174,9 @@ const UserManager = () => {
     try {
       let res;
       if (deleteRowIndex === -1) {
-        res = await UserApi.removeList({ ids: selectedArr });
+        res = await QuestionApi.removeList({ ids: selectedArr });
       } else {
-        res = await UserApi.removeOne(rows[deleteRowIndex].id);
+        res = await QuestionApi.removeOne(rows[deleteRowIndex].id);
       }
 
       toast.success(res.detail, {
@@ -213,29 +206,10 @@ const UserManager = () => {
     }, 500);
   };
 
-  const handleChangeIsAdmin = async (e, idx) => {
-    e.stopPropagation();
-    try {
-      const newIsAdmin = e.target.checked;
-      const res = await UserApi.changeIsAdmin({ id: rows[idx].id, is_admin: newIsAdmin });
-      const newRows = [...rows];
-      newRows[idx].is_admin = newIsAdmin;
-      setRows(newRows);
-      toast.success(res.detail, { theme: 'colored', toastId: 'headerId', autoClose: 1500 });
-    } catch (error) {
-      const { status, data } = error.response;
-      if (status === 400 || status === 404) {
-        toast.error(data.detail, { theme: 'colored', toastId: 'headerId', autoClose: 1500 });
-      } else {
-        navigate(`/error/${status}`);
-      }
-    }
-  };
-
   return (
     <Box>
-      <TitlePage title="EngQuizz - Quản lý tài khoản" />
-      <Typography sx={{ marginBottom: '20px', fontSize: '18px' }}>Danh sách tài khoản</Typography>
+      <TitlePage title="EngQuizz - Quản lý câu hỏi" />
+      <Typography sx={{ marginBottom: '20px', fontSize: '18px' }}>Danh sách câu hỏi</Typography>
       {/* list content */}
       <Box
         padding="20px"
@@ -260,28 +234,19 @@ const UserManager = () => {
           handleSearchChange={handleSearchChange}
           filters={[
             {
-              value: genderFilter,
-              label: 'Giới tính',
-              handleChange: (e) => setGenderFilter(e.target.value),
+              value: levelFilter,
+              label: 'Độ khó',
+              handleChange: (e) => setLevelFilter(e.target.value),
               options: [
                 { value: 'all', label: 'Tất cả' },
-                { value: 'Nam', label: 'Nam' },
+                { value: 'Dễ', label: 'Dễ' },
                 {
-                  value: 'Nữ',
-                  label: 'Nữ',
+                  value: 'Trung bình',
+                  label: 'Trung bình',
                 },
-              ],
-            },
-            {
-              value: isAdminFilter,
-              label: 'Vai trò',
-              handleChange: (e) => setIsAdminFilter(e.target.value),
-              options: [
-                { value: 'all', label: 'Tất cả' },
-                { value: 'true', label: 'Quản trị viên' },
                 {
-                  value: 'false',
-                  label: 'Học viên',
+                  value: 'Khó',
+                  label: 'Khó',
                 },
               ],
             },
@@ -302,7 +267,6 @@ const UserManager = () => {
           handleDeleteRowIndex={handleDeleteRowIndex}
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
-          handleChangeIsAdmin={handleChangeIsAdmin}
           total={total}
           page={page}
         />
@@ -310,11 +274,11 @@ const UserManager = () => {
         <RemoveDialog
           open={openDeleteDialog}
           onClose={handleDeleteDialogClose}
-          title={'Xác nhận xóa tài khoản'}
+          title={'Xác nhận xóa câu hỏi'}
           content={`Bạn chắc chắn muốn xóa ${
             deleteRowIndex === -1
-              ? selectedArr.length + ' tài khoản này'
-              : `tài khoản "${rows[deleteRowIndex]?.fullname}"`
+              ? selectedArr.length + ' câu hỏi này'
+              : `câu hỏi "${rows[deleteRowIndex]?.content}"`
           } hay không?`}
           isLoading={isDeleteLoading}
           onConfirm={handleDeleteRow}
@@ -325,4 +289,4 @@ const UserManager = () => {
   );
 };
 
-export default UserManager;
+export default QuestionManager;

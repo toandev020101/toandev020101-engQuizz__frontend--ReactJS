@@ -2,12 +2,9 @@ import {
   Avatar,
   Box,
   Checkbox,
-  FormControlLabel,
-  FormGroup,
   IconButton,
   Paper,
   Skeleton,
-  Switch,
   Table,
   TableBody,
   TableCell,
@@ -21,10 +18,10 @@ import {
   useTheme,
 } from '@mui/material';
 import React, { Fragment } from 'react';
-import { BiEdit, BiShow, BiTrashAlt } from 'react-icons/bi';
+import { BiEdit, BiTrashAlt } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
-import { dateShortFormat } from '../../../utils/format';
-import JWTManager from '../../../utils/jwt';
+import { dateShortFormat } from '../../../../utils/format';
+import JWTManager from '../../../../utils/jwt';
 
 const TableContent = ({
   rows,
@@ -38,53 +35,42 @@ const TableContent = ({
   handleDeleteRowIndex,
   handleChangePage,
   handleChangeRowsPerPage,
-  handleChangeIsAdmin,
   total,
   page,
 }) => {
   const theme = useTheme();
 
-  const childTableCell = (headCell, row, index) => {
+  const childTableCell = (headCell, row) => {
+    console.log(row);
     if (!headCell.key) return null;
-    if (headCell.key === 'avatar')
+
+    if (headCell.key.includes('content_')) {
+      const index = headCell.key.split('content_')[1];
       return (
-        <TableCell>
-          {row[headCell.key] ? (
-            <Avatar
-              alt={row.fullname}
-              src={row[headCell.key]}
-              sx={{ width: '50px', height: '50px' }}
-            />
+        <TableCell sx={{ fontSize: '14px' }}>
+          {row.answers[index - 1] ? (
+            row.answers[index - 1].is_correct ? (
+              <Typography
+                variant="option"
+                padding="8px 15px"
+                bgcolor={'#e9ffea'}
+                border={`1px solid ${theme.palette.success.main}`}
+                borderRadius={'5px'}
+                color={theme.palette.success.main}
+              >
+                {row.answers[index - 1].content}
+              </Typography>
+            ) : (
+              row.answers[index - 1].content
+            )
           ) : (
-            <Avatar sx={{ width: '50px', height: '50px' }}>{row.fullname.substring(0, 1)}</Avatar>
+            '--'
           )}
         </TableCell>
       );
+    }
 
-    if (headCell.key === 'is_admin')
-      return (
-        <TableCell sx={{ fontSize: '14px' }}>
-          <FormGroup>
-            <FormControlLabel
-              sx={{
-                '& > span': {
-                  fontSize: '14px',
-                },
-              }}
-              control={
-                <Switch
-                  defaultChecked={row[headCell.key]}
-                  onChange={(e) => handleChangeIsAdmin(e, index)}
-                  onClick={(e) => e.stopPropagation()}
-                />
-              }
-              label={row[headCell.key] ? 'Quản trị viên' : 'Học viên'}
-            />
-          </FormGroup>
-        </TableCell>
-      );
-
-    if (headCell.key === 'birth_day' || headCell.key === 'created_at')
+    if (headCell.key === 'created_at')
       return (
         <TableCell sx={{ fontSize: '14px' }}>
           {row[headCell.key] ? dateShortFormat(row[headCell.key]) : '--'}
@@ -219,18 +205,17 @@ const TableContent = ({
                         inputProps={{
                           'aria-labelledby': labelId,
                         }}
-                        disabled={row.id === JWTManager.getUserId()}
                       />
                     </TableCell>
                     {headCells.map((headCell, idx) => (
                       <Fragment key={`rowItem-${idx}`} sx={{ fontSize: '14px' }}>
-                        {childTableCell(headCell, row, index)}
+                        {childTableCell(headCell, row)}
                       </Fragment>
                     ))}
                     <TableCell sx={{ fontSize: '14px' }}>
                       <Box display="flex" gap="10px">
                         <Tooltip title="Sửa">
-                          <Link to={`/quan-tri/tai-khoan/chinh-sua/${row.id}`}>
+                          <Link to={`/quan-tri/thi-truc-tuyen/cau-hoi/chinh-sua/${row.id}`}>
                             <IconButton>
                               <BiEdit style={{ color: theme.palette.warning.main }} />
                             </IconButton>
@@ -243,14 +228,10 @@ const TableContent = ({
                               e.stopPropagation();
                               handleDeleteRowIndex(index);
                             }}
-                            disabled={row.id === JWTManager.getUserId()}
                           >
                             <BiTrashAlt
                               style={{
-                                color:
-                                  row.id === JWTManager.getUserId()
-                                    ? theme.palette.grey[400]
-                                    : theme.palette.error.main,
+                                color: theme.palette.error.main,
                               }}
                             />
                           </IconButton>
@@ -268,7 +249,7 @@ const TableContent = ({
                     align="center"
                     sx={{ fontSize: '14px' }}
                   >
-                    Không có tài khoản nào!
+                    Không có câu hỏi nào!
                   </TableCell>
                 </TableRow>
               )}

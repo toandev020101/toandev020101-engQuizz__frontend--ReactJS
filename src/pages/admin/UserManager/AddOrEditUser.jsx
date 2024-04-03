@@ -60,10 +60,10 @@ const AddOrEditUser = () => {
           is_admin: user.is_admin,
         });
       } catch (error) {
-        const { data } = error.response;
-        if (data.code === 400 || data.code === 404) {
-          toast.error(data.message, { theme: 'colored', toastId: 'headerId', autoClose: 1500 });
-        } else if (data.code === 500) {
+        const { status, data } = error.response;
+        if (status === 400 || status === 404) {
+          toast.error(data.detail, { theme: 'colored', toastId: 'headerId', autoClose: 1500 });
+        } else if (status === 500) {
           navigate('/error/500');
         }
       }
@@ -124,11 +124,11 @@ const AddOrEditUser = () => {
         },
       });
     } catch (error) {
-      const { data } = error.response;
-      if (data.code === 400 || data.code === 404) {
-        toast.error(data.message, { theme: 'colored', toastId: 'headerId', autoClose: 1500 });
+      const { status, data } = error.response;
+      if (status === 400 || status === 404) {
+        toast.error(data.detail, { theme: 'colored', toastId: 'headerId', autoClose: 1500 });
       } else {
-        navigate(`/error/${data.code}`);
+        navigate(`/error/${status}`);
       }
     }
     setIsLoading(false);

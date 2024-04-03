@@ -8,6 +8,9 @@ import AdminLayout from './layouts/AdminLayout';
 import UserManager from './pages/admin/UserManager';
 import VerifyEmail from './pages/auth/VerifyEmail';
 import AddOrEditUser from './pages/admin/UserManager/AddOrEditUser';
+import QuestionManager from './pages/admin/OnlineExamManager/QuestionManager';
+import AddOrEditQuestion from './pages/admin/OnlineExamManager/QuestionManager/AddOrEditQuestion';
+import ImportQuestion from './pages/admin/OnlineExamManager/QuestionManager/ImportQuestion';
 
 export const publicRoutes = [
   // auth
@@ -21,6 +24,23 @@ export const publicRoutes = [
 
 export const privateRoutes = [
   // admin
+  {
+    path: '/quan-tri/thi-truc-tuyen/cau-hoi/chinh-sua/:id',
+    component: AddOrEditQuestion,
+    layout: AdminLayout,
+  },
+  {
+    path: '/quan-tri/thi-truc-tuyen/cau-hoi/nhap-tep',
+    component: ImportQuestion,
+    layout: AdminLayout,
+  },
+  {
+    path: '/quan-tri/thi-truc-tuyen/cau-hoi/them-moi',
+    component: AddOrEditQuestion,
+    layout: AdminLayout,
+  },
+  { path: '/quan-tri/thi-truc-tuyen/cau-hoi', component: QuestionManager, layout: AdminLayout },
+
   { path: '/quan-tri/tai-khoan/chinh-sua/:id', component: AddOrEditUser, layout: AdminLayout },
   { path: '/quan-tri/tai-khoan/them-moi', component: AddOrEditUser, layout: AdminLayout },
   { path: '/quan-tri/tai-khoan', component: UserManager, layout: AdminLayout },
