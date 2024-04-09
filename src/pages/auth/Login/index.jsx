@@ -19,15 +19,24 @@ const Login = () => {
       zIndex={99}
     >
       <TitlePage title="EngQuizz - Đăng nhập" />
-      <Box display={'flex'} justifyContent={'center'} alignItems={'center'} gap={'10px'} marginBottom={'20px'}>
-        <HiPuzzle fontSize={45} style={{ color: theme.palette.primary.main, marginTop: '-15px' }} />
-        <Typography variant="h5" sx={{
-          display: 'flex',
-          alignItems: 'center',
-          fontWeight: 600,
-          textTransform: 'uppercase',
-          color: theme.palette.grey[700],
-        }}>
+      <Box
+        display={'flex'}
+        justifyContent={'center'}
+        alignItems={'center'}
+        gap={'10px'}
+        marginBottom={'20px'}
+      >
+        <HiPuzzle fontSize={45} style={{ color: theme.palette.primary.main, marginTop: '-5px' }} />
+        <Typography
+          variant="h5"
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            fontWeight: 600,
+            textTransform: 'uppercase',
+            color: theme.palette.primary.main,
+          }}
+        >
           EngQuizz
         </Typography>
       </Box>
@@ -36,7 +45,9 @@ const Login = () => {
         Chào mừng đến với EngQuizz! 👋🏻
       </Typography>
 
-      <Typography sx={{ margin: '10px 0 20px 0', fontSize: '15px', color: theme.palette.grey[600] }}>
+      <Typography
+        sx={{ margin: '10px 0 20px 0', fontSize: '15px', color: theme.palette.grey[600] }}
+      >
         Vui lòng đăng nhập vào tài khoản của bạn và bắt đầu cuộc phiêu lưu
       </Typography>
 

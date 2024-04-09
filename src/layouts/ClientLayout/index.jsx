@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import * as UserApi from '../../apis/userApi';
 import { useAuthContext } from '../../contexts/authContext';
 import JWTManager from '../../utils/jwt';
+import Header from './Header';
 
 const ClientLayout = ({ children }) => {
   const navigate = useNavigate();
@@ -29,7 +30,12 @@ const ClientLayout = ({ children }) => {
     }
   }, [navigate, isAuthenticated]);
 
-  return <Box>{children}</Box>;
+  return (
+    <>
+      <Header />
+      <Box padding="0 40px">{children}</Box>
+    </>
+  );
 };
 
 export default ClientLayout;

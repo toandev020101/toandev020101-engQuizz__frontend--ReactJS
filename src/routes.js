@@ -13,6 +13,7 @@ import AddOrEditQuestion from './pages/admin/OnlineExamManager/QuestionManager/A
 import ImportQuestion from './pages/admin/OnlineExamManager/QuestionManager/ImportQuestion';
 import TestManager from './pages/admin/OnlineExamManager/TestManager';
 import AddOrEditTest from './pages/admin/OnlineExamManager/TestManager/AddOrEditTest';
+import Exam from './pages/web/Exam';
 
 export const publicRoutes = [
   // auth
@@ -25,6 +26,9 @@ export const publicRoutes = [
 ];
 
 export const privateRoutes = [
+  // user
+  { path: '/bai-thi', component: Exam, layout: ClientLayout },
+
   // admin
   {
     path: '/quan-tri/thi-truc-tuyen/de-thi/chinh-sua/:id',

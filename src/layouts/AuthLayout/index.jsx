@@ -1,10 +1,12 @@
-import { Box, useTheme } from '@mui/material';
+import { Box, useTheme, IconButton } from '@mui/material';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../contexts/authContext';
 import * as UserApi from '../../apis/userApi';
 import JWTManager from '../../utils/jwt';
 import ToastNotify from '../../components/ToastNotify';
+import { FaArrowLeft } from 'react-icons/fa6';
+import { Link } from 'react-router-dom';
 
 const AuthLayout = ({ children }) => {
   const theme = useTheme();
@@ -29,6 +31,12 @@ const AuthLayout = ({ children }) => {
 
   return (
     <Box position={'relative'}>
+      <Link to="/">
+        <IconButton variant="contained" sx={{ position: 'absolute', top: '20px', left: '20px' }}>
+          <FaArrowLeft color={theme.palette.primary.main} />
+        </IconButton>
+      </Link>
+
       <ToastNotify />
       <Box
         bgcolor={theme.palette.grey[100]}
