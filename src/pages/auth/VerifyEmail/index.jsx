@@ -1,12 +1,12 @@
-import { Box, Button, Typography, useTheme } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { Box, Button, Typography, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import TitlePage from '../../../components/TitlePage';
 import * as AuthApi from '../../../apis/authApi';
-import JWTManager from '../../../utils/jwt';
+import TitlePage from '../../../components/TitlePage';
 import { useAuthContext } from '../../../contexts/authContext';
+import JWTManager from '../../../utils/jwt';
 
 const VerifyEmail = () => {
   const navigate = useNavigate();

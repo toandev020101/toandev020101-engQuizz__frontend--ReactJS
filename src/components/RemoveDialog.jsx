@@ -27,9 +27,9 @@ const RemoveDialog = ({ open, onClose, title, content, isLoading, onConfirm }) =
           textTransform: 'inherit',
         }}
         disabled={isLoading}
-        onClick={() => {
+        onClick={async () => {
+          await onConfirm();
           onClose();
-          onConfirm();
         }}
       >
         Xác nhận

@@ -36,7 +36,7 @@ const Sidebar = () => {
       icon: <PiExam />,
       child: [
         {
-          slug: '',
+          slug: 'de-thi',
           name: 'Đề thi',
           icon: <LuCalendarClock />,
         },

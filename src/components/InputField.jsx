@@ -15,8 +15,16 @@ const InputField = (props) => {
     readonly,
     onHandleChange,
     errorMessage,
+    min,
+    max,
     ...others
   } = props;
+
+  const calcValue = (value) => {
+    if (value < min) return min;
+    if (value > max) return max;
+    return value;
+  };
 
   return (
     <Controller
@@ -29,7 +37,7 @@ const InputField = (props) => {
         <Box position="relative" width="100%">
           <TextField
             onBlur={onBlur} // notify when input is touched
-            value={value}
+            value={type === 'number' ? calcValue(value) : value}
             onChange={onChange}
             name={name}
             label={`${label}${required ? ' *' : ''}`}

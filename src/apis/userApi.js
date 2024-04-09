@@ -7,6 +7,11 @@ export const getPagination = ({ _limit, _page, searchTerm, gender, isAdmin }) =>
   return axiosClient.get(url);
 };
 
+export const getListByRole = () => {
+  const url = `${BASE_LINK}/any/student`;
+  return axiosClient.get(url);
+};
+
 export const getOneById = (id) => {
   const url = `${BASE_LINK}/${id}`;
   return axiosClient.get(url);

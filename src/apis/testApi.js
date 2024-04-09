@@ -1,14 +1,9 @@
 import axiosClient from './axiosClient';
 
-const BASE_LINK = '/question';
+const BASE_LINK = '/test';
 
-export const getAll = () => {
-  const url = `${BASE_LINK}/all`;
-  return axiosClient.get(url);
-};
-
-export const getPagination = ({ _limit, _page, searchTerm, level }) => {
-  const url = `${BASE_LINK}?_page=${_page}&_limit=${_limit}&search_term=${searchTerm}&level=${level}`;
+export const getPagination = ({ _limit, _page, searchTerm, status }) => {
+  const url = `${BASE_LINK}?_page=${_page}&_limit=${_limit}&search_term=${searchTerm}&status_test=${status}`;
   return axiosClient.get(url);
 };
 
@@ -19,11 +14,6 @@ export const getOneById = (id) => {
 
 export const addOne = (data) => {
   const url = `${BASE_LINK}`;
-  return axiosClient.post(url, data);
-};
-
-export const addList = (data) => {
-  const url = `${BASE_LINK}/any`;
   return axiosClient.post(url, data);
 };
 

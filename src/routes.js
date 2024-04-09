@@ -11,6 +11,8 @@ import AddOrEditUser from './pages/admin/UserManager/AddOrEditUser';
 import QuestionManager from './pages/admin/OnlineExamManager/QuestionManager';
 import AddOrEditQuestion from './pages/admin/OnlineExamManager/QuestionManager/AddOrEditQuestion';
 import ImportQuestion from './pages/admin/OnlineExamManager/QuestionManager/ImportQuestion';
+import TestManager from './pages/admin/OnlineExamManager/TestManager';
+import AddOrEditTest from './pages/admin/OnlineExamManager/TestManager/AddOrEditTest';
 
 export const publicRoutes = [
   // auth
@@ -24,6 +26,18 @@ export const publicRoutes = [
 
 export const privateRoutes = [
   // admin
+  {
+    path: '/quan-tri/thi-truc-tuyen/de-thi/chinh-sua/:id',
+    component: AddOrEditTest,
+    layout: AdminLayout,
+  },
+  {
+    path: '/quan-tri/thi-truc-tuyen/de-thi/them-moi',
+    component: AddOrEditTest,
+    layout: AdminLayout,
+  },
+  { path: '/quan-tri/thi-truc-tuyen/de-thi', component: TestManager, layout: AdminLayout },
+
   {
     path: '/quan-tri/thi-truc-tuyen/cau-hoi/chinh-sua/:id',
     component: AddOrEditQuestion,

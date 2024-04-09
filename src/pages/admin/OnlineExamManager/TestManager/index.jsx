@@ -2,14 +2,14 @@ import { Box, Typography, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import * as QuestionApi from '../../../../apis/questionApi';
+import * as TestApi from '../../../../apis/testApi';
 import RemoveDialog from '../../../../components/RemoveDialog';
 import TitlePage from '../../../../components/TitlePage';
 import { useAuthContext } from '../../../../contexts/authContext';
 import Header from './Header';
 import TableContent from './TableContent';
 
-const QuestionManager = () => {
+const TestManager = () => {
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -26,7 +26,7 @@ const QuestionManager = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const [reload, setReload] = useState(false);
-  const [levelFilter, setLevelFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
 
   const { isAuthenticated } = useAuthContext();
 
@@ -39,41 +39,33 @@ const QuestionManager = () => {
       width: 60,
     },
     {
-      label: 'Nội dung',
-      key: 'content',
+      label: 'Tên',
+      key: 'name',
+      numeric: false,
+      width: 200,
+    },
+    {
+      label: 'Thời gian bắt đầu',
+      key: 'start_date',
       numeric: false,
     },
     {
-      label: 'Độ khó',
-      key: 'level',
+      label: 'Thời gian kết thúc',
+      key: 'end_date',
+      numeric: false,
+    },
+    {
+      label: 'Thời gian làm bài',
+      key: 'exam_time',
+      numeric: false,
+      width: 180,
+    },
+    {
+      label: 'Trạng thái',
+      key: 'status',
       numeric: false,
       width: 120,
     },
-    {
-      label: 'Câu trả lời 1',
-      key: 'content_1',
-      numeric: false,
-      width: 150,
-    },
-    {
-      label: 'Câu trả lời 2',
-      key: 'content_2',
-      numeric: false,
-      width: 150,
-    },
-    {
-      label: 'Câu trả lời 3',
-      key: 'content_3',
-      numeric: false,
-      width: 150,
-    },
-    {
-      label: 'Câu trả lời 4',
-      key: 'content_4',
-      numeric: false,
-      width: 150,
-    },
-
     {
       label: 'Thao tác',
       numeric: false,
@@ -88,19 +80,19 @@ const QuestionManager = () => {
     const getPagination = async () => {
       setIsLoading(true);
       try {
-        const res = await QuestionApi.getPagination({
+        const res = await TestApi.getPagination({
           _limit: rowsPerPage,
           _page: page,
           searchTerm,
-          level: levelFilter,
+          status: statusFilter,
         });
 
-        const { questions, total } = res.data;
+        const { tests, total } = res.data;
 
-        if (questions.length === 0 && page > 0) {
+        if (tests.length === 0 && page > 0) {
           setPage((prevPage) => prevPage - 1);
         }
-        setRows(questions);
+        setRows(tests);
         setTotal(total);
       } catch (error) {
         const { status, data } = error.response;
@@ -117,7 +109,7 @@ const QuestionManager = () => {
       getPagination();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, rowsPerPage, reload, isAuthenticated, navigate, levelFilter]);
+  }, [page, rowsPerPage, reload, isAuthenticated, navigate, statusFilter]);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -173,9 +165,9 @@ const QuestionManager = () => {
     try {
       let res;
       if (deleteRowIndex === -1) {
-        res = await QuestionApi.removeList({ ids: selectedArr });
+        res = await TestApi.removeList({ ids: selectedArr });
       } else {
-        res = await QuestionApi.removeOne(rows[deleteRowIndex].id);
+        res = await TestApi.removeOne(rows[deleteRowIndex].id);
       }
 
       toast.success(res.detail, {
@@ -207,8 +199,8 @@ const QuestionManager = () => {
 
   return (
     <Box>
-      <TitlePage title="EngQuizz - Quản lý câu hỏi" />
-      <Typography sx={{ marginBottom: '20px', fontSize: '18px' }}>Danh sách câu hỏi</Typography>
+      <TitlePage title="EngQuizz - Quản lý đề thi" />
+      <Typography sx={{ marginBottom: '20px', fontSize: '18px' }}>Danh sách đề thi</Typography>
       {/* list content */}
       <Box
         padding="20px"
@@ -229,29 +221,31 @@ const QuestionManager = () => {
         }}
       >
         <Header
+          searchTitle="Tìm kiếm đề thi"
           searchTerm={searchTerm}
           handleSearchChange={handleSearchChange}
           filters={[
             {
-              value: levelFilter,
-              label: 'Độ khó',
-              handleChange: (e) => setLevelFilter(e.target.value),
+              value: statusFilter,
+              label: 'Trạng thái',
+              handleChange: (e) => setStatusFilter(e.target.value),
               options: [
                 { value: 'all', label: 'Tất cả' },
-                { value: 'Dễ', label: 'Dễ' },
+                { value: 'Chưa mở', label: 'Chưa mở' },
                 {
-                  value: 'Trung bình',
-                  label: 'Trung bình',
+                  value: 'Đang mở',
+                  label: 'Đang mở',
                 },
                 {
-                  value: 'Khó',
-                  label: 'Khó',
+                  value: 'Đã đóng',
+                  label: 'Đã đóng',
                 },
               ],
             },
           ]}
           selectedArr={selectedArr}
           handleDeleteRowIndex={handleDeleteRowIndex}
+          addLinkTo="/quan-tri/thi-truc-tuyen/de-thi/them-moi"
         />
 
         <TableContent
@@ -273,11 +267,11 @@ const QuestionManager = () => {
         <RemoveDialog
           open={openDeleteDialog}
           onClose={handleDeleteDialogClose}
-          title={'Xác nhận xóa câu hỏi'}
+          title={'Xác nhận xóa đề thi'}
           content={`Bạn chắc chắn muốn xóa ${
             deleteRowIndex === -1
-              ? selectedArr.length + ' câu hỏi này'
-              : `câu hỏi "${rows[deleteRowIndex]?.content}"`
+              ? selectedArr.length + ' đề thi này'
+              : `đề thi "${rows[deleteRowIndex]?.content}"`
           } hay không?`}
           isLoading={isDeleteLoading}
           onConfirm={handleDeleteRow}
@@ -288,4 +282,4 @@ const QuestionManager = () => {
   );
 };
 
-export default QuestionManager;
+export default TestManager;
