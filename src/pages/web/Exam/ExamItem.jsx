@@ -30,14 +30,19 @@ const ExamItem = ({ item }) => {
     const minutes = Math.floor((timeDown % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((timeDown % (1000 * 60)) / 1000);
 
+    const daysStr = String(days).padStart(2, '0');
+    const hoursStr = String(hours).padStart(2, '0');
+    const minutesStr = String(minutes).padStart(2, '0');
+    const secondsStr = String(seconds).padStart(2, '0');
+
     if (days > 0) {
-      return `Mở sau ${days} ngày ${hours} giờ`;
+      return `Mở sau ${daysStr} ngày ${hoursStr} giờ`;
     } else if (hours > 0) {
-      return `Mở sau ${hours} giờ ${minutes} phút`;
+      return `Mở sau ${hoursStr} giờ ${minutesStr} phút`;
     } else if (minutes > 0) {
-      return `Mở sau ${minutes} phút ${seconds} giây`;
+      return `Mở sau ${minutesStr} phút ${secondsStr} giây`;
     } else {
-      return `Mở sau ${seconds} giây`;
+      return `Mở sau ${secondsStr} giây`;
     }
   };
 
@@ -55,7 +60,7 @@ const ExamItem = ({ item }) => {
         {item.test.name}
       </Typography>
       <Typography color={theme.palette.primary.main} marginBottom={'50px'}>
-        {item.test.exam_time} phút
+        {item.test.exam_time / 60} phút
       </Typography>
       <Typography marginBottom={'5px'}>
         Bắt đầu: {dateTimeFullFormat(item.test.start_date)}
@@ -79,11 +84,30 @@ const ExamItem = ({ item }) => {
           {formatTimeDown()}
         </Typography>
       ) : new Date() - new Date(item.test.end_date) < 0 ? (
-        <Link to={`/bai-thi/${item.id}`}>
-          <Button variant="contained" sx={{ minWidth: '150px', textTransform: 'none' }}>
-            Vào thi
-          </Button>
-        </Link>
+        item.is_submitted ? (
+          <Typography
+            sx={{
+              border: `1px solid ${theme.palette.success.main}`,
+              borderRadius: '3px',
+              bgcolor: '#e2ffe4',
+              color: theme.palette.success.main,
+              display: 'inline-block',
+              width: '150px',
+              height: '36px',
+              lineHeight: '36px',
+              textAlign: 'center',
+              fontSize: '15px',
+            }}
+          >
+            Đã nộp
+          </Typography>
+        ) : (
+          <Link to={`/bai-thi/thi-truc-tuyen/${item.id}`}>
+            <Button variant="contained" sx={{ minWidth: '150px', textTransform: 'none' }}>
+              Vào thi
+            </Button>
+          </Link>
+        )
       ) : (
         <Typography
           sx={{

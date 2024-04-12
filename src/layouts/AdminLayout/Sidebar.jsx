@@ -83,9 +83,20 @@ const Sidebar = () => {
         >
           <HiPuzzle
             fontSize={45}
-            style={{ color: theme.palette.primary.main, marginTop: '-15px' }}
+            style={{ color: theme.palette.primary.main, marginTop: '-10px' }}
           />
-          <Typography variant="h4">EngQuizz</Typography>
+          <Typography
+            variant="h5"
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              fontWeight: 600,
+              textTransform: 'uppercase',
+              color: theme.palette.primary.main,
+            }}
+          >
+            ENGQUIZZ
+          </Typography>
         </Box>
       </Link>
       {/* logo */}

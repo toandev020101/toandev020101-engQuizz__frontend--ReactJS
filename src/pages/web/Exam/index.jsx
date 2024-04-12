@@ -1,12 +1,12 @@
+import { Box, Button, Typography, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useAuthContext } from '../../../contexts/authContext';
-import { useNavigate, Link } from 'react-router-dom';
-import { Box, Typography, Button, useTheme } from '@mui/material';
 import { CiFileOff } from 'react-icons/ci';
-import * as ExamApi from '../../../apis/examApi';
-import JWTManager from '../../../utils/jwt';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import * as ExamApi from '../../../apis/examApi';
+import { useAuthContext } from '../../../contexts/authContext';
 import ExamItem from './ExamItem';
+import TitlePage from '../../../components/TitlePage';
 
 const Exam = () => {
   const navigate = useNavigate();
@@ -56,7 +56,8 @@ const Exam = () => {
   }, [isAuthenticated]);
 
   return (
-    <>
+    <Box>
+      <TitlePage title="EngQuizz - Vào thi" />
       {exams.length === 0 ? (
         <Box
           display={'flex'}
@@ -81,7 +82,7 @@ const Exam = () => {
           ))}
         </Box>
       )}
-    </>
+    </Box>
   );
 };
 

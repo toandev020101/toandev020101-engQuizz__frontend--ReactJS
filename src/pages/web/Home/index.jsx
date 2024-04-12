@@ -1,5 +1,6 @@
 import { Box, Typography, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
+import TitlePage from './../../../components/TitlePage';
 
 const Home = () => {
   return (
@@ -10,6 +11,7 @@ const Home = () => {
       height={'calc(100vh - 75px)'}
       padding="0 160px"
     >
+      <TitlePage title="EngQuizz - Trang chủ" />
       <Box display={'flex'} justifyContent={'center'} alignItems={'center'} gap={'50px'}>
         <Box flex={1}>
           <Typography variant="h3" marginBottom={'10px'}>

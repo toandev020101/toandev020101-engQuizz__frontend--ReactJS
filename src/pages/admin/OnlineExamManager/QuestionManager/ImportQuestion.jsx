@@ -255,9 +255,13 @@ const ImportQuestion = () => {
             variant="h6"
           >
             Hãy tải lên tệp excel chứa danh sách câu hỏi đúng định dạng.{' '}
-            <Link to="" style={{ textDecoration: 'none' }}>
+            <a
+              href="/templates/example_questions.csv"
+              download
+              style={{ textDecoration: 'none', color: theme.palette.primary.main }}
+            >
               Tải tệp excel mẫu tại đây.
-            </Link>
+            </a>
           </Typography>
 
           {/* upload */}

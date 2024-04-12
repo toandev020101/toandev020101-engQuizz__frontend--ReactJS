@@ -14,6 +14,7 @@ import ImportQuestion from './pages/admin/OnlineExamManager/QuestionManager/Impo
 import TestManager from './pages/admin/OnlineExamManager/TestManager';
 import AddOrEditTest from './pages/admin/OnlineExamManager/TestManager/AddOrEditTest';
 import Exam from './pages/web/Exam';
+import OnlineExam from './pages/web/OnlineExam';
 
 export const publicRoutes = [
   // auth
@@ -27,6 +28,7 @@ export const publicRoutes = [
 
 export const privateRoutes = [
   // user
+  { path: '/bai-thi/thi-truc-tuyen/:id', component: OnlineExam, layout: null },
   { path: '/bai-thi', component: Exam, layout: ClientLayout },
 
   // admin

@@ -72,7 +72,7 @@ const TableContent = ({
     if (headCell.key === 'exam_time')
       return (
         <TableCell sx={{ fontSize: '14px' }}>
-          {row[headCell.key] ? row[headCell.key] + ' phút' : '--'}
+          {row[headCell.key] ? row[headCell.key] / 60 + ' phút' : '--'}
         </TableCell>
       );
 

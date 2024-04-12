@@ -77,7 +77,7 @@ const AddOrEditTest = () => {
           name: test.name,
           start_date: dateTimeLocal(test.start_date),
           end_date: dateTimeLocal(test.end_date),
-          exam_time: test.exam_time,
+          exam_time: test.exam_time / 60,
           easy_quantity: test.easy_quantity,
           average_quantity: test.average_quantity,
           difficult_quantity: test.difficult_quantity,
@@ -190,6 +190,7 @@ const AddOrEditTest = () => {
 
   const handleSubmit = async (values) => {
     setIsLoading(true);
+    values.exam_time = values.exam_time * 60;
     const exams = [];
 
     const questionChoices = [];

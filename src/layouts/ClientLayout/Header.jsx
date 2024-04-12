@@ -93,7 +93,7 @@ const Header = () => {
           <Box display={'flex'} justifyContent={'center'} alignItems={'center'} gap={'10px'}>
             <HiPuzzle
               fontSize={45}
-              style={{ color: theme.palette.primary.main, marginTop: '-5px' }}
+              style={{ color: theme.palette.primary.main, marginTop: '-10px' }}
             />
             <Typography
               variant="h5"
