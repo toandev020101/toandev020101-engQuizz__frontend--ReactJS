@@ -1,4 +1,14 @@
-import { Box, useTheme } from '@mui/material';
+import {
+  Box,
+  useTheme,
+  Button,
+  DialogActions,
+  DialogContentText,
+  DialogContent,
+  DialogTitle,
+  Dialog,
+  Typography,
+} from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -10,6 +20,7 @@ import Header from './Header';
 import QuestionItem from './QuestionItem';
 import Sidebar from './Sidebar';
 import TitlePage from './../../../components/TitlePage';
+import { RiTimerFlashLine } from 'react-icons/ri';
 
 const OnlineExam = () => {
   const navigate = useNavigate();
@@ -23,6 +34,7 @@ const OnlineExam = () => {
   const [timeDown, setTimeDown] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [reload, setReload] = useState(false);
+  const [openTimeOut, setOpenTimeOut] = useState(false);
 
   useEffect(() => {
     const timeId = setTimeout(() => {
@@ -110,7 +122,13 @@ const OnlineExam = () => {
       );
       receiveSocket.onmessage = (event) => {
         const message = JSON.parse(event.data);
-        if (message.type === 'set_time') setTimeDown(message.time_down);
+        if (message.type === 'set_time') {
+          setTimeDown(message.time_down);
+        } else {
+          setOpenTimeOut(true);
+          receiveSocket.close();
+          setTimeDown(0);
+        }
       };
 
       return () => {
@@ -160,11 +178,14 @@ const OnlineExam = () => {
     setIsLoading(true);
     const message = { type: 'submit' };
     await sendSocket.send(JSON.stringify(message));
-
-    if (exam.test.show_result) navigate(`/bai-thi/ket-qua/${exam?.id}`);
-    else navigate(`/bai-thi/`);
+    navigate(`/bai-thi/nop-bai`);
 
     setIsLoading(false);
+  };
+
+  const handleTimeOut = () => {
+    navigate(`/bai-thi/nop-bai`);
+    setOpenTimeOut(false);
   };
 
   return (
@@ -208,6 +229,54 @@ const OnlineExam = () => {
           />
         </Box>
       </Box>
+
+      <Dialog
+        open={openTimeOut}
+        onClose={handleTimeOut}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title" sx={{ fontSize: '18px' }}>
+          Thông báo hết giờ
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText
+            id="alert-dialog-description"
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '5px',
+            }}
+          >
+            <RiTimerFlashLine fontSize={'80px'} color={theme.palette.error.main} />
+            <Typography color={theme.palette.error.main} fontSize="20px">
+              Đã hết thời gian làm bài.
+            </Typography>
+            <Typography>Bài làm của bạn đã tự động được nộp lên hệ thống.</Typography>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            marginBottom: '10px',
+          }}
+        >
+          <Button
+            variant={'contained'}
+            onClick={handleTimeOut}
+            color="error"
+            sx={{
+              textTransform: 'capitalize',
+            }}
+          >
+            Thoát
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

@@ -1,10 +1,19 @@
+import { LoadingButton } from '@mui/lab';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Typography, useTheme } from '@mui/material';
 import { FaPowerOff } from 'react-icons/fa6';
-import { RiTimerFlashLine } from 'react-icons/ri';
 import { LuUpload } from 'react-icons/lu';
-import ConfirmDialog from '../../../components/ConfirmDialog';
-import { useNavigate } from 'react-router-dom';
+import { RiTimerFlashLine } from 'react-icons/ri';
 
 const Header = ({ user, timeDown, isLoading, handleExit, handleSubmit }) => {
   const theme = useTheme();
@@ -46,14 +55,70 @@ const Header = ({ user, timeDown, isLoading, handleExit, handleSubmit }) => {
         Thoát
       </Button>
 
-      <ConfirmDialog
+      <Dialog
         open={openExitDialog}
         onClose={() => setExitOpenDialog(false)}
-        title={'Xác nhận thoát'}
-        content={'Bạn vẫn chưa nộp bài, có chắc chắn muốn thoát hay không ?'}
-        isLoading={isLoading}
-        onConfirm={handleExit}
-      />
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title" sx={{ fontSize: '18px' }}>
+          Thông báo thoát
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText
+            id="alert-dialog-description"
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '5px',
+            }}
+          >
+            <FaPowerOff fontSize={'80px'} color={theme.palette.warning.main} />
+            <Typography color={theme.palette.error.main} fontSize="20px">
+              Bạn vẫn chưa nộp bài.
+            </Typography>
+            <Typography>Bạn có chắc chắn muốn thoát hay không ?</Typography>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginBottom: '10px',
+            gap: '5px',
+          }}
+        >
+          <LoadingButton
+            loading={isLoading}
+            loadingIndicator={'Loading...'}
+            variant="contained"
+            type="submit"
+            sx={{
+              textTransform: 'inherit',
+            }}
+            disabled={isLoading}
+            onClick={async () => {
+              await handleExit();
+              setExitOpenDialog(false);
+            }}
+          >
+            Xác nhận
+          </LoadingButton>
+
+          <Button
+            variant={'contained'}
+            onClick={() => setExitOpenDialog(false)}
+            color="error"
+            sx={{
+              textTransform: 'capitalize',
+            }}
+          >
+            Hủy
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Typography fontWeight={600}>Học viên: {user?.fullname}</Typography>
 
@@ -73,14 +138,70 @@ const Header = ({ user, timeDown, isLoading, handleExit, handleSubmit }) => {
           Nộp bài
         </Button>
 
-        <ConfirmDialog
+        <Dialog
           open={openSubmitDialog}
           onClose={() => setSubmitOpenDialog(false)}
-          title={'Xác nhận nộp bài'}
-          content={'Bạn có chắc chắn muốn nộp bài hay không ?'}
-          isLoading={isLoading}
-          onConfirm={handleSubmit}
-        />
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title" sx={{ fontSize: '18px' }}>
+            Thông báo nộp bài
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText
+              id="alert-dialog-description"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '5px',
+              }}
+            >
+              <LuUpload fontSize={'80px'} color={theme.palette.success.main} />
+              <Typography color={theme.palette.success.main} fontSize="20px">
+                Hoàn thành bài thi.
+              </Typography>
+              <Typography>Bạn có chắc chắn muốn nộp bài hay không ?</Typography>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              marginBottom: '10px',
+              gap: '5px',
+            }}
+          >
+            <LoadingButton
+              loading={isLoading}
+              loadingIndicator={'Loading...'}
+              variant="contained"
+              type="submit"
+              sx={{
+                textTransform: 'inherit',
+              }}
+              disabled={isLoading}
+              onClick={async () => {
+                await handleSubmit();
+                setSubmitOpenDialog(false);
+              }}
+            >
+              Xác nhận
+            </LoadingButton>
+
+            <Button
+              variant={'contained'}
+              onClick={() => setSubmitOpenDialog(false)}
+              color="error"
+              sx={{
+                textTransform: 'capitalize',
+              }}
+            >
+              Hủy
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Box>
     </Box>
   );
