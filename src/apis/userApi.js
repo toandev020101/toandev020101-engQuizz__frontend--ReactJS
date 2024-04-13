@@ -32,6 +32,11 @@ export const changeIsAdmin = ({ id, is_admin }) => {
   return axiosClient.patch(url, { is_admin });
 };
 
+export const changePassword = (data) => {
+  const url = `${BASE_LINK}`;
+  return axiosClient.patch(url, data);
+};
+
 export const removeOne = (id) => {
   const url = `${BASE_LINK}/${id}`;
   return axiosClient.delete(url);

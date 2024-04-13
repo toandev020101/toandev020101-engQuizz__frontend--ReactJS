@@ -12,7 +12,7 @@ import {
   Button,
 } from '@mui/material';
 import { HiPuzzle } from 'react-icons/hi';
-import { BiLogOut } from 'react-icons/bi';
+import { BiLogOut, BiUserPin } from 'react-icons/bi';
 import ToastNotify from '../../components/ToastNotify';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthContext } from '../../contexts/authContext';
@@ -20,6 +20,9 @@ import JWTManager from '../../utils/jwt';
 import { toast } from 'react-toastify';
 import * as UserApi from '../../apis/userApi';
 import * as AuthApi from '../../apis/authApi';
+import { MdOutlineAdminPanelSettings } from 'react-icons/md';
+import { PiExam } from 'react-icons/pi';
+import * as settings from '../../settings';
 
 const Header = () => {
   const theme = useTheme();
@@ -45,6 +48,7 @@ const Header = () => {
         const userId = JWTManager.getUserId();
         const res = await UserApi.getOneById(userId);
         const newUser = res.data.user;
+        newUser.avatar = settings.SERVER_URL + newUser.avatar;
         setUser(newUser);
       } catch (error) {
         const { status, data } = error.response;
@@ -88,7 +92,12 @@ const Header = () => {
   return (
     <>
       <ToastNotify />
-      <Box display="flex" justifyContent={'space-between'} padding={'10px 40px'}>
+      <Box
+        display="flex"
+        justifyContent={'space-between'}
+        alignItems={'center'}
+        padding={'10px 40px'}
+      >
         <Link to="/" style={{ textDecoration: 'none' }}>
           <Box display={'flex'} justifyContent={'center'} alignItems={'center'} gap={'10px'}>
             <HiPuzzle
@@ -178,6 +187,27 @@ const Header = () => {
               transformOrigin={{ horizontal: 'right', vertical: 'top' }}
               anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
+              {user?.is_admin && (
+                <Link to="/quan-tri">
+                  <MenuItem>
+                    <MdOutlineAdminPanelSettings fontSize="20px" style={{ marginRight: '10px' }} />{' '}
+                    Quản trị
+                  </MenuItem>
+                </Link>
+              )}
+
+              <Link to="/tai-khoan/ho-so">
+                <MenuItem>
+                  <BiUserPin fontSize="20px" style={{ marginRight: '10px' }} /> Hồ sơ
+                </MenuItem>
+              </Link>
+
+              <Link to="/tai-khoan/bai-thi">
+                <MenuItem>
+                  <PiExam fontSize="20px" style={{ marginRight: '10px' }} /> Bài thi
+                </MenuItem>
+              </Link>
+
               <Divider />
 
               <MenuItem onClick={handleLogout}>

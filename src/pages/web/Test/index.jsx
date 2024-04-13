@@ -5,14 +5,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import * as ExamApi from '../../../apis/examApi';
 import { useAuthContext } from '../../../contexts/authContext';
-import ExamItem from './ExamItem';
+import ExamItem from './TestItem';
 import TitlePage from '../../../components/TitlePage';
+import LoadingPage from './../../../components/LoadingPage';
 
-const Exam = () => {
+const Test = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const { isAuthenticated } = useAuthContext();
   const [exams, setExams] = useState([]);
+  const [isLoadingPage, setIsLoadingPage] = useState(true);
 
   useEffect(() => {
     const timeId = setTimeout(() => {
@@ -52,8 +54,11 @@ const Exam = () => {
 
     if (isAuthenticated) {
       getExams();
+      setIsLoadingPage(false);
     }
   }, [isAuthenticated]);
+
+  if (isLoadingPage) return <LoadingPage />;
 
   return (
     <Box>
@@ -76,7 +81,7 @@ const Exam = () => {
           </Link>
         </Box>
       ) : (
-        <Box display={'grid'} gridTemplateColumns={'repeat(5, 1fr)'} gap="15px" margin="20px 0">
+        <Box display={'grid'} gridTemplateColumns={'repeat(4, 1fr)'} gap="15px" margin="20px 0">
           {exams.map((exam, index) => (
             <ExamItem key={`exam-item-${index}`} item={exam} />
           ))}
@@ -86,4 +91,4 @@ const Exam = () => {
   );
 };
 
-export default Exam;
+export default Test;

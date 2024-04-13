@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import * as UserApi from '../../apis/userApi';
 import { useAuthContext } from '../../contexts/authContext';
 import JWTManager from '../../utils/jwt';
-import Header from './Header';
+import Header from '../components/Header';
 
 const ClientLayout = ({ children }) => {
   const navigate = useNavigate();

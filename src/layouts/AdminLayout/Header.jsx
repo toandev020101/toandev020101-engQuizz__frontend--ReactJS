@@ -20,6 +20,7 @@ import * as UserApi from '../../apis/userApi';
 import ToastNotify from '../../components/ToastNotify';
 import { useAuthContext } from '../../contexts/authContext';
 import JWTManager from '../../utils/jwt';
+import * as settings from '../../settings';
 
 const Header = () => {
   const theme = useTheme();
@@ -68,6 +69,7 @@ const Header = () => {
         if (!newUser.is_admin) {
           navigate('/error/403');
         }
+        newUser.avatar = settings.SERVER_URL + newUser.avatar;
         setUser(newUser);
       } catch (error) {
         const { status, data } = error.response;

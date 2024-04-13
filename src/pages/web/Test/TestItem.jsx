@@ -1,9 +1,12 @@
+import { Box, Button, Typography, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, useTheme, Button } from '@mui/material';
-import { dateTimeFullFormat } from '../../../utils/format';
+import { IoTimeOutline } from 'react-icons/io5';
+import { LuCalendarCheck, LuCalendarOff } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
+import { dateTimeFullFormat } from '../../../utils/format';
+import { GoQuestion } from 'react-icons/go';
 
-const ExamItem = ({ item }) => {
+const TestItem = ({ item }) => {
   const theme = useTheme();
   const [timeDown, setTimeDown] = useState(0);
 
@@ -52,22 +55,51 @@ const ExamItem = ({ item }) => {
       flexDirection={'column'}
       alignItems={'center'}
       borderRadius={'5px'}
-      height={'300px'}
       boxShadow={'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'}
       padding="15px"
+      gap="15px"
     >
       <Typography variant="h6" marginBottom={'10px'}>
         {item.test.name}
       </Typography>
-      <Typography color={theme.palette.primary.main} marginBottom={'50px'}>
-        {item.test.exam_time / 60} phút
-      </Typography>
-      <Typography marginBottom={'5px'}>
-        Bắt đầu: {dateTimeFullFormat(item.test.start_date)}
-      </Typography>
-      <Typography marginBottom={'50px'}>
-        Kết thúc: {dateTimeFullFormat(item.test.end_date)}
-      </Typography>
+
+      <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
+        <Box display="flex" alignItems="center" gap="5px">
+          <IoTimeOutline fontSize={'25px'} />
+          <Typography>Thời gian làm bài</Typography>
+        </Box>
+        <Typography>{item.test.exam_time / 60} phút</Typography>
+      </Box>
+
+      <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
+        <Box display="flex" alignItems="center" gap="5px">
+          <LuCalendarCheck fontSize={'24px'} />
+          <Typography>Thời gian mở đề</Typography>
+        </Box>
+        <Typography>{dateTimeFullFormat(item.test.start_date)}</Typography>
+      </Box>
+
+      <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
+        <Box display="flex" alignItems="center" gap="5px">
+          <LuCalendarOff fontSize={'24px'} />
+          <Typography>Thời gian kết thúc</Typography>
+        </Box>
+        <Typography>{dateTimeFullFormat(item.test.end_date)}</Typography>
+      </Box>
+
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        width="100%"
+        marginBottom="20px"
+      >
+        <Box display="flex" alignItems="center" gap="5px">
+          <GoQuestion fontSize={'24px'} />
+          <Typography>Số lượng câu hỏi</Typography>
+        </Box>
+        <Typography>{item.exam_details.length}</Typography>
+      </Box>
 
       {timeDown > 0 ? (
         <Typography
@@ -102,7 +134,7 @@ const ExamItem = ({ item }) => {
             Đã nộp
           </Typography>
         ) : (
-          <Link to={`/bai-thi/thi-truc-tuyen/${item.id}`}>
+          <Link to={`/de-thi/thi-truc-tuyen/${item.id}`}>
             <Button variant="contained" sx={{ minWidth: '150px', textTransform: 'none' }}>
               Vào thi
             </Button>
@@ -130,4 +162,4 @@ const ExamItem = ({ item }) => {
   );
 };
 
-export default ExamItem;
+export default TestItem;

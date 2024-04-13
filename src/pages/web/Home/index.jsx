@@ -23,7 +23,7 @@ const Home = () => {
             thi và đạt được thành công.
           </Typography>
 
-          <Link to="/bai-thi">
+          <Link to="/de-thi">
             <Button variant="contained" sx={{ minWidth: '150px' }}>
               Vào thi
             </Button>

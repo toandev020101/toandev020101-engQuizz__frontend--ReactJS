@@ -12,6 +12,7 @@ import RadioGroupField from '../../../components/RadioGroupField';
 import userSchema from '../../../schemas/userSchema';
 import { dateShortValueFormat } from '../../../utils/format';
 import SelectField from '../../../components/SelectField';
+import * as settings from '../../../settings';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -51,7 +52,7 @@ const AddOrEditUser = () => {
       try {
         const res = await UserApi.getOneById(id);
         const { user } = res.data;
-        setAvatar(user.avatar);
+        setAvatar(settings.SERVER_URL + user.avatar);
         form.reset({
           fullname: user.fullname,
           gender: user.gender,

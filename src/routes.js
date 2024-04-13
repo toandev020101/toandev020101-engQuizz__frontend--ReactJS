@@ -13,8 +13,14 @@ import AddOrEditQuestion from './pages/admin/OnlineExamManager/QuestionManager/A
 import ImportQuestion from './pages/admin/OnlineExamManager/QuestionManager/ImportQuestion';
 import TestManager from './pages/admin/OnlineExamManager/TestManager';
 import AddOrEditTest from './pages/admin/OnlineExamManager/TestManager/AddOrEditTest';
-import Exam from './pages/web/Exam';
+import Test from './pages/web/Test';
 import OnlineExam from './pages/web/OnlineExam';
+import Submit from './pages/web/OnlineExam/Submit';
+import UserLayout from './layouts/UserLayout';
+import Info from './pages/web/User/Info';
+import Exam from './pages/web/User/Exam';
+import Result from './pages/web/User/Exam/Result';
+import ChangePassword from './pages/web/User/Info/ChangePassword';
 
 export const publicRoutes = [
   // auth
@@ -28,8 +34,15 @@ export const publicRoutes = [
 
 export const privateRoutes = [
   // user
-  { path: '/bai-thi/thi-truc-tuyen/:id', component: OnlineExam, layout: null },
-  { path: '/bai-thi', component: Exam, layout: ClientLayout },
+  { path: '/tai-khoan/bai-thi/ket-qua/:id', component: Result, layout: ClientLayout },
+  { path: '/tai-khoan/bai-thi', component: Exam, layout: UserLayout },
+
+  { path: '/tai-khoan/thay-doi-mat-khau', component: ChangePassword, layout: UserLayout },
+  { path: '/tai-khoan/ho-so', component: Info, layout: UserLayout },
+
+  { path: '/de-thi/nop-bai/:id', component: Submit, layout: ClientLayout },
+  { path: '/de-thi/thi-truc-tuyen/:id', component: OnlineExam, layout: null },
+  { path: '/de-thi', component: Test, layout: ClientLayout },
 
   // admin
   {

@@ -21,6 +21,7 @@ import QuestionItem from './QuestionItem';
 import Sidebar from './Sidebar';
 import TitlePage from './../../../components/TitlePage';
 import { RiTimerFlashLine } from 'react-icons/ri';
+import * as settings from '../../../settings';
 
 const OnlineExam = () => {
   const navigate = useNavigate();
@@ -62,8 +63,8 @@ const OnlineExam = () => {
         const res = await ExamApi.getOneById(id);
         const { exam } = res.data;
         const newExam = exam;
-        if (new Date() > new Date(exam.test.end_date) || exam.is_submitted) {
-          navigate('/bai-thi', {
+        if (new Date() > new Date(newExam.test.end_date) || newExam.is_submitted) {
+          navigate('/de-thi', {
             state: {
               notify: {
                 type: 'error',
@@ -74,9 +75,11 @@ const OnlineExam = () => {
           });
         }
 
-        if (exam.test.mix_answer) {
-          exam.exam_details.forEach((exam_detail, index) => {
-            exam.exam_details[index].question.answers = shuffleArray(exam_detail.question.answers);
+        if (newExam.test.mix_answer) {
+          newExam.exam_details.forEach((exam_detail, index) => {
+            newExam.exam_details[index].question.answers = shuffleArray(
+              exam_detail.question.answers,
+            );
           });
         }
 
@@ -101,7 +104,7 @@ const OnlineExam = () => {
     if (isAuthenticated) {
       const userId = JWTManager.getUserId();
       const newSendSocket = new WebSocket(
-        `ws://localhost:8000/v1/api/websocket/send/${id}/${userId}`,
+        `${settings.WEBSOCKET_URL + settings.BASE_API}/websocket/send/${id}/${userId}`,
       );
       setSendSocket(newSendSocket);
 
@@ -118,7 +121,7 @@ const OnlineExam = () => {
     if (isAuthenticated) {
       const userId = JWTManager.getUserId();
       const receiveSocket = new WebSocket(
-        `ws://localhost:8000/v1/api/websocket/receive/${id}/${userId}`,
+        `${settings.WEBSOCKET_URL + settings.BASE_API}/websocket/receive/${id}/${userId}`,
       );
       receiveSocket.onmessage = (event) => {
         const message = JSON.parse(event.data);
@@ -170,7 +173,7 @@ const OnlineExam = () => {
 
   const handleExit = () => {
     setIsLoading(true);
-    navigate('/bai-thi');
+    navigate('/de-thi');
     setIsLoading(false);
   };
 
@@ -178,13 +181,13 @@ const OnlineExam = () => {
     setIsLoading(true);
     const message = { type: 'submit' };
     await sendSocket.send(JSON.stringify(message));
-    navigate(`/bai-thi/nop-bai`);
+    navigate(`/de-thi/nop-bai/${id}`);
 
     setIsLoading(false);
   };
 
   const handleTimeOut = () => {
-    navigate(`/bai-thi/nop-bai`);
+    navigate(`/de-thi/nop-bai/${id}`);
     setOpenTimeOut(false);
   };
 
