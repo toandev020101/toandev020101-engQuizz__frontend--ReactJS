@@ -38,6 +38,7 @@ const Test = () => {
 
   useEffect(() => {
     const getExams = async () => {
+      setIsLoadingPage(true);
       try {
         const res = await ExamApi.getListByUserId();
         const { exams } = res.data;
@@ -50,11 +51,12 @@ const Test = () => {
           navigate(`/error/${status}`);
         }
       }
+
+      setIsLoadingPage(false);
     };
 
     if (isAuthenticated) {
       getExams();
-      setIsLoadingPage(false);
     }
   }, [isAuthenticated]);
 

@@ -38,11 +38,7 @@ const App = () => {
       <Route
         key={index}
         path={route.path}
-        element={
-          <Layout>
-            <Page />
-          </Layout>
-        }
+        element={<Layout>{route.prevPath ? <Page prevPath={route.prevPath} /> : <Page />}</Layout>}
       />
     );
   };

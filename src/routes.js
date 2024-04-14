@@ -19,8 +19,10 @@ import Submit from './pages/web/OnlineExam/Submit';
 import UserLayout from './layouts/UserLayout';
 import Info from './pages/web/User/Info';
 import Exam from './pages/web/User/Exam';
-import Result from './pages/web/User/Exam/Result';
+import Detail from './pages/components/Detail';
 import ChangePassword from './pages/web/User/Info/ChangePassword';
+import ExamManager from './pages/admin/OnlineExamManager/ExamManager';
+import DetailLayout from './layouts/AdminLayout/DetailLayout';
 
 export const publicRoutes = [
   // auth
@@ -34,7 +36,12 @@ export const publicRoutes = [
 
 export const privateRoutes = [
   // user
-  { path: '/tai-khoan/bai-thi/ket-qua/:id', component: Result, layout: ClientLayout },
+  {
+    path: '/tai-khoan/bai-thi/:id',
+    component: Detail,
+    layout: ClientLayout,
+    prevPath: '/tai-khoan/bai-thi',
+  },
   { path: '/tai-khoan/bai-thi', component: Exam, layout: UserLayout },
 
   { path: '/tai-khoan/thay-doi-mat-khau', component: ChangePassword, layout: UserLayout },
@@ -45,6 +52,14 @@ export const privateRoutes = [
   { path: '/de-thi', component: Test, layout: ClientLayout },
 
   // admin
+  {
+    path: '/quan-tri/thi-truc-tuyen/bai-thi/:id',
+    component: Detail,
+    layout: DetailLayout,
+    prevPath: '/quan-tri/thi-truc-tuyen/bai-thi',
+  },
+  { path: '/quan-tri/thi-truc-tuyen/bai-thi', component: ExamManager, layout: AdminLayout },
+
   {
     path: '/quan-tri/thi-truc-tuyen/de-thi/chinh-sua/:id',
     component: AddOrEditTest,

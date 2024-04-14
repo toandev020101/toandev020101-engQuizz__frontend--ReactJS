@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import * as userApi from '../../../../apis/userApi';
 import TitlePage from './../../../../components/TitlePage';
-import ToastNotify from './../../../../components/ToastNotify';
 import InputField from './../../../../components/InputField';
 import changePasswordSchema from '../../../../schemas/changePasswordSchema';
 
@@ -51,7 +50,6 @@ const ChangePassword = () => {
   return (
     <>
       <TitlePage title="EngQuizz - Thay đổi mật khẩu" />
-      <ToastNotify />
       <Box
         padding="15px 30px"
         boxShadow="0 1px 2px 0 rgba(0,0,0,.13)"

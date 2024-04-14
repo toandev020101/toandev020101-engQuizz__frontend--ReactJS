@@ -125,8 +125,8 @@ const TableContent = ({
           <TableRow>
             <TableCell padding="checkbox">
               <Checkbox
-                indeterminate={selectedArr.length > 0 && selectedArr.length < rows.length - 1}
-                checked={rows.length > 1 && selectedArr.length === rows.length - 1}
+                indeterminate={selectedArr.length > 0 && selectedArr.length <= rows.length - 1}
+                checked={rows.length > 1 && selectedArr.length === rows.length}
                 onChange={handleSelectAllClick}
                 inputProps={{
                   'aria-label': 'select all desserts',

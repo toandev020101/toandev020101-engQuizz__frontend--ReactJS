@@ -18,9 +18,8 @@ import {
   useTheme,
 } from '@mui/material';
 import React, { Fragment } from 'react';
-import { BiEdit, BiTrashAlt } from 'react-icons/bi';
+import { BiDetail, BiEdit, BiTrashAlt } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
-import { dateShortFormat } from '../../../../utils/format';
 import JWTManager from '../../../../utils/jwt';
 
 const TableContent = ({
@@ -43,36 +42,64 @@ const TableContent = ({
   const childTableCell = (headCell, row) => {
     if (!headCell.key) return null;
 
-    if (headCell.key.includes('content_')) {
-      const index = headCell.key.split('content_')[1];
+    if (headCell.key.includes('.')) {
+      const keys = headCell.key.split('.');
+      if (keys[0] === 'result')
+        if (row[keys[0]] && row[keys[0]][keys[1]])
+          return (
+            <TableCell sx={{ fontSize: '14px' }}>
+              {keys[1] === 'score'
+                ? row[keys[0]][keys[1]].toFixed(2)
+                : `${row[keys[0]][keys[1]]}/${row.exam_details.length}`}
+            </TableCell>
+          );
+        else return <TableCell sx={{ fontSize: '14px' }}>--</TableCell>;
       return (
         <TableCell sx={{ fontSize: '14px' }}>
-          {row.answers[index - 1] ? (
-            row.answers[index - 1].is_correct ? (
-              <Typography
-                variant="option"
-                padding="8px 15px"
-                bgcolor={'#e9ffea'}
-                border={`1px solid ${theme.palette.success.main}`}
-                borderRadius={'5px'}
-                color={theme.palette.success.main}
-              >
-                {row.answers[index - 1].content}
-              </Typography>
-            ) : (
-              row.answers[index - 1].content
-            )
-          ) : (
-            '--'
-          )}
+          {row[keys[0]][keys[1]] ? row[keys[0]][keys[1]] : '--'}
         </TableCell>
       );
     }
 
-    if (headCell.key === 'created_at')
+    if (headCell.key === 'exam_time')
       return (
         <TableCell sx={{ fontSize: '14px' }}>
-          {row[headCell.key] ? dateShortFormat(row[headCell.key]) : '--'}
+          {row[headCell.key] ? `${Math.round(row[headCell.key] / 60)} phút` : '--'}
+        </TableCell>
+      );
+
+    if (headCell.key === 'is_submitted')
+      return (
+        <TableCell sx={{ fontSize: '14px' }}>
+          {row[headCell.key] ? (
+            <Typography
+              sx={{
+                color: theme.palette.success.main,
+                border: `1px solid ${theme.palette.success.main}`,
+                borderRadius: '3px',
+                bgcolor: '#d8f9da',
+                fontSize: '14px',
+                display: 'inline-block',
+                padding: '5px 10px',
+              }}
+            >
+              Đã nộp
+            </Typography>
+          ) : (
+            <Typography
+              sx={{
+                color: theme.palette.error.main,
+                border: `1px solid ${theme.palette.error.main}`,
+                borderRadius: '3px',
+                bgcolor: '#fbdfdf',
+                fontSize: '14px',
+                display: 'inline-block',
+                padding: '5px 10px',
+              }}
+            >
+              Chưa nộp
+            </Typography>
+          )}
         </TableCell>
       );
 
@@ -163,7 +190,7 @@ const TableContent = ({
                       <Box display="flex" gap="10px">
                         <Skeleton animation="wave" variant="circular">
                           <IconButton>
-                            <BiEdit />
+                            <BiDetail />
                           </IconButton>
                         </Skeleton>
 
@@ -213,10 +240,10 @@ const TableContent = ({
                     ))}
                     <TableCell sx={{ fontSize: '14px' }}>
                       <Box display="flex" gap="10px">
-                        <Tooltip title="Sửa">
-                          <Link to={`/quan-tri/thi-truc-tuyen/cau-hoi/chinh-sua/${row.id}`}>
+                        <Tooltip title="Xem chi tiết">
+                          <Link to={`/quan-tri/thi-truc-tuyen/bai-thi/${row.id}`}>
                             <IconButton>
-                              <BiEdit style={{ color: theme.palette.warning.main }} />
+                              <BiDetail style={{ color: theme.palette.info.main }} />
                             </IconButton>
                           </Link>
                         </Tooltip>
@@ -248,7 +275,7 @@ const TableContent = ({
                     align="center"
                     sx={{ fontSize: '14px' }}
                   >
-                    Không có câu hỏi nào!
+                    Không có bài thi nào!
                   </TableCell>
                 </TableRow>
               )}

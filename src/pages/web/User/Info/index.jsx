@@ -15,6 +15,7 @@ import TitlePage from './../../../../components/TitlePage';
 import JWTManager from './../../../../utils/jwt';
 import { useAuthContext } from '../../../../contexts/authContext';
 import * as settings from '../../../../settings';
+import LoadingPage from '../../../../components/LoadingPage';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -35,6 +36,7 @@ const Info = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [avatar, setAvatar] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingPage, setIsLoadingPage] = useState(true);
 
   const form = useForm({
     defaultValues: {
@@ -48,6 +50,7 @@ const Info = () => {
 
   useEffect(() => {
     const getUser = async () => {
+      setIsLoadingPage(true);
       try {
         const res = await UserApi.getOneById(JWTManager.getUserId());
         const { user } = res.data;
@@ -66,6 +69,7 @@ const Info = () => {
           navigate('/error/500');
         }
       }
+      setIsLoadingPage(false);
     };
 
     if (isAuthenticated) {
@@ -129,6 +133,8 @@ const Info = () => {
     }
     setIsLoading(false);
   };
+
+  if (isLoadingPage) return <LoadingPage />;
 
   return (
     <>

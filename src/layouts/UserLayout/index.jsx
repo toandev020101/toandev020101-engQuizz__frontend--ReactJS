@@ -63,7 +63,7 @@ const UserLayout = ({ children }) => {
         minHeight={'calc(100vh - 75px)'}
       >
         <Sidebar />
-        <Box width={'100%'}>{children}</Box>
+        <Box width={'calc(100vw - 360px)'}>{children}</Box>
       </Box>
     </>
   );

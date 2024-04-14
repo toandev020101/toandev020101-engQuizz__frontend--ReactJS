@@ -17,11 +17,12 @@ import { useAuthContext } from '../../../contexts/authContext';
 import { shuffleArray } from '../../../utils/random';
 import JWTManager from './../../../utils/jwt';
 import Header from './Header';
-import QuestionItem from './QuestionItem';
-import Sidebar from './Sidebar';
+import QuestionItem from '../../components/QuestionItem';
+import Sidebar from '../../components/Sidebar';
 import TitlePage from './../../../components/TitlePage';
 import { RiTimerFlashLine } from 'react-icons/ri';
 import * as settings from '../../../settings';
+import LoadingPage from '../../../components/LoadingPage';
 
 const OnlineExam = () => {
   const navigate = useNavigate();
@@ -36,6 +37,7 @@ const OnlineExam = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [reload, setReload] = useState(false);
   const [openTimeOut, setOpenTimeOut] = useState(false);
+  const [isLoadingPage, setIsLoadingPage] = useState(true);
 
   useEffect(() => {
     const timeId = setTimeout(() => {
@@ -59,6 +61,7 @@ const OnlineExam = () => {
 
   useEffect(() => {
     const getExamById = async () => {
+      setIsLoadingPage(true);
       try {
         const res = await ExamApi.getOneById(id);
         const { exam } = res.data;
@@ -93,6 +96,8 @@ const OnlineExam = () => {
           navigate(`/error/${status}`);
         }
       }
+
+      setIsLoadingPage(false);
     };
 
     if (isAuthenticated) {
@@ -191,6 +196,8 @@ const OnlineExam = () => {
     setOpenTimeOut(false);
   };
 
+  if (isLoadingPage) return <LoadingPage />;
+
   return (
     <>
       <TitlePage title="EngQuizz - Thi trực tuyến" />
@@ -211,19 +218,21 @@ const OnlineExam = () => {
         >
           <Box flex={2} display="flex" flexDirection={'column'} gap="20px">
             {exam &&
-              exam.exam_details
-                .sort(
-                  (exam_detail_1, exam_detail_2) => exam_detail_1.position - exam_detail_2.position,
-                )
-                .map((exam_detail, index) => (
-                  <QuestionItem
-                    key={`question-item-${index}`}
-                    exam_detail={exam_detail}
-                    index={index + 1}
-                    questionRefs={questionRefs}
-                    handleChoiceAnswer={handleChoiceAnswer}
-                  />
-                ))}
+              (exam.test.mix_answer
+                ? exam.exam_details.sort(
+                    (exam_detail_1, exam_detail_2) =>
+                      exam_detail_1.position - exam_detail_2.position,
+                  )
+                : exam.exam_details
+              ).map((exam_detail, index) => (
+                <QuestionItem
+                  key={`question-item-${index}`}
+                  exam_detail={exam_detail}
+                  index={index + 1}
+                  questionRefs={questionRefs}
+                  handleChoiceAnswer={handleChoiceAnswer}
+                />
+              ))}
           </Box>
           <Sidebar
             flex={1}

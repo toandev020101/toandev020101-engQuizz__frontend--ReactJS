@@ -3,7 +3,14 @@ import React from 'react';
 
 const choices = ['A', 'B', 'C', 'D'];
 
-const QuestionItem = ({ exam_detail, index, questionRefs, handleChoiceAnswer }) => {
+const QuestionItem = ({
+  exam_detail,
+  index,
+  questionRefs,
+  handleChoiceAnswer,
+  readonly = false,
+  showAnswer = false,
+}) => {
   const theme = useTheme();
 
   return (
@@ -48,33 +55,49 @@ const QuestionItem = ({ exam_detail, index, questionRefs, handleChoiceAnswer }) 
             lineHeight={'36px'}
             fontWeight={600}
             sx={{
-              cursor: 'pointer',
-              '&:hover': {
-                bgcolor: theme.palette.secondary.light,
-                color: theme.palette.common.white,
-              },
+              cursor: readonly ? 'default' : 'pointer',
+              '&:hover': readonly
+                ? {}
+                : {
+                    bgcolor: theme.palette.secondary.light,
+                    color: theme.palette.common.white,
+                  },
 
               bgcolor:
                 exam_detail.answer_id === answer.id
-                  ? exam_detail.is_answer_draft
+                  ? showAnswer
+                    ? answer.is_correct
+                      ? theme.palette.success.light
+                      : theme.palette.error.light
+                    : exam_detail.is_answer_draft
                     ? theme.palette.warning.main
                     : theme.palette.secondary.light
+                  : showAnswer
+                  ? answer.is_correct
+                    ? theme.palette.success.light
+                    : theme.palette.common.white
                   : theme.palette.common.white,
               color:
                 exam_detail.answer_id === answer.id
                   ? theme.palette.common.white
+                  : showAnswer
+                  ? answer.is_correct
+                    ? theme.palette.common.white
+                    : theme.palette.common.black
                   : theme.palette.common.black,
             }}
-            onClick={() =>
-              handleChoiceAnswer({ question_id: exam_detail.question.id, answer_id: answer.id })
-            }
+            onClick={() => {
+              if (!readonly)
+                handleChoiceAnswer({ question_id: exam_detail.question.id, answer_id: answer.id });
+            }}
             onContextMenu={(e) => {
               e.preventDefault();
-              handleChoiceAnswer({
-                question_id: exam_detail.question.id,
-                answer_id: answer.id,
-                is_answer_draft: true,
-              });
+              if (!readonly)
+                handleChoiceAnswer({
+                  question_id: exam_detail.question.id,
+                  answer_id: answer.id,
+                  is_answer_draft: true,
+                });
             }}
           >
             {choices[idx]}

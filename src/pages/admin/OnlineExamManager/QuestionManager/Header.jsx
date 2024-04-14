@@ -85,7 +85,8 @@ const Header = ({ searchTerm, handleSearchChange, filters, selectedArr, handleDe
           <Button
             variant="contained"
             startIcon={<FiPlusSquare />}
-            sx={{ textTransform: 'inherit', bgcolor: '#9c27b0', '&:hover': { bgcolor: '#821895' } }}
+            sx={{ textTransform: 'inherit' }}
+            color="secondary"
           >
             Nhập từ tệp
           </Button>
