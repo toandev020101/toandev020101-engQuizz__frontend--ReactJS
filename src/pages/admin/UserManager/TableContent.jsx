@@ -25,6 +25,7 @@ import { BiEdit, BiShow, BiTrashAlt } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
 import { dateShortFormat } from '../../../utils/format';
 import JWTManager from '../../../utils/jwt';
+import * as settings from '../../../settings';
 
 const TableContent = ({
   rows,
@@ -52,7 +53,7 @@ const TableContent = ({
           {row[headCell.key] ? (
             <Avatar
               alt={row.fullname}
-              src={row[headCell.key]}
+              src={`${settings.SERVER_URL}${row[headCell.key]}`}
               sx={{ width: '50px', height: '50px' }}
             />
           ) : (

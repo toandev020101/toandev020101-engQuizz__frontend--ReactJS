@@ -2,6 +2,11 @@ import axiosClient from './axiosClient';
 
 const BASE_LINK = '/question';
 
+export const countAll = () => {
+  const url = `${BASE_LINK}/count-all`;
+  return axiosClient.get(url);
+};
+
 export const getAll = () => {
   const url = `${BASE_LINK}/all`;
   return axiosClient.get(url);

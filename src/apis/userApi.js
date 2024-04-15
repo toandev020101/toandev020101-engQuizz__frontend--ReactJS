@@ -2,6 +2,11 @@ import axiosClient from './axiosClient';
 
 const BASE_LINK = '/user';
 
+export const countStudent = () => {
+  const url = `${BASE_LINK}/count-student`;
+  return axiosClient.get(url);
+};
+
 export const getPagination = ({ _limit, _page, searchTerm, gender, isAdmin }) => {
   const url = `${BASE_LINK}?_page=${_page}&_limit=${_limit}&search_term=${searchTerm}&gender=${gender}&is_admin=${isAdmin}`;
   return axiosClient.get(url);

@@ -45,15 +45,17 @@ const Submit = () => {
         const newExam = exam;
 
         if (!newExam.is_submitted) {
-          navigate('/de-thi', {
-            state: {
-              notify: {
-                type: 'error',
-                message: 'Bài thi chưa làm hoặc chưa nộp!',
-                options: { theme: 'colored', toastId: 'authId', autoClose: 1500 },
+          timeId = setTimeout(() => {
+            navigate('/de-thi', {
+              state: {
+                notify: {
+                  type: 'error',
+                  message: 'Bài thi chưa làm hoặc chưa nộp!',
+                  options: { theme: 'colored', toastId: 'authId', autoClose: 1500 },
+                },
               },
-            },
-          });
+            });
+          }, 1000);
         }
 
         setExam({ ...newExam });
@@ -69,9 +71,7 @@ const Submit = () => {
     };
 
     if (isAuthenticated && id) {
-      timeId = setTimeout(() => {
-        getExamById();
-      }, 500);
+      getExamById();
     }
 
     return () => clearTimeout(timeId);
