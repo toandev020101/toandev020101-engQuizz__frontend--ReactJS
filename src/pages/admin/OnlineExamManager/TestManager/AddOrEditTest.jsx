@@ -372,7 +372,7 @@ const AddOrEditTest = () => {
           </Box>
 
           <Box display="flex" flexDirection="column" gap="10px">
-            <Typography>Danh sách sinh viên *</Typography>
+            <Typography>Danh sách học viên *</Typography>
             <TransferList
               type="user"
               list={users}

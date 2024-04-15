@@ -160,30 +160,18 @@ const Header = ({
         )}
       </Box>
 
-      <Box display={'flex'} gap={'10px'}>
-        <LoadingButton
-          disabled={rows.length === 0}
-          loading={isExportDataLoading}
-          loadingPosition="start"
-          variant="contained"
-          startIcon={<PiExport />}
-          sx={{ textTransform: 'inherit' }}
-          color="secondary"
-          onClick={() => handleExportExcel(rows)}
-        >
-          Xuất Excel
-        </LoadingButton>
-
-        <Link to={'/quan-tri/thi-truc-tuyen/cau-hoi/them-moi'}>
-          <Button
-            variant="contained"
-            startIcon={<FiPlusSquare />}
-            sx={{ textTransform: 'inherit' }}
-          >
-            Thêm mới
-          </Button>
-        </Link>
-      </Box>
+      <LoadingButton
+        disabled={rows.length === 0}
+        loading={isExportDataLoading}
+        loadingPosition="start"
+        variant="contained"
+        startIcon={<PiExport />}
+        sx={{ textTransform: 'inherit' }}
+        color="secondary"
+        onClick={() => handleExportExcel(rows)}
+      >
+        Xuất Excel
+      </LoadingButton>
     </Box>
   );
 };

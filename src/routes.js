@@ -23,6 +23,8 @@ import Detail from './pages/components/Detail';
 import ChangePassword from './pages/web/User/Info/ChangePassword';
 import ExamManager from './pages/admin/OnlineExamManager/ExamManager';
 import DetailLayout from './layouts/AdminLayout/DetailLayout';
+import NotificationManager from './pages/admin/OnlineExamManager/NotificationManager';
+import AddNotification from './pages/admin/OnlineExamManager/NotificationManager/AddNotification';
 
 export const publicRoutes = [
   // auth
@@ -52,6 +54,9 @@ export const privateRoutes = [
   { path: '/de-thi', component: Test, layout: ClientLayout },
 
   // admin
+  { path: '/quan-tri/thong-bao/them-moi', component: AddNotification, layout: AdminLayout },
+  { path: '/quan-tri/thong-bao', component: NotificationManager, layout: AdminLayout },
+
   {
     path: '/quan-tri/thi-truc-tuyen/bai-thi/:id',
     component: Detail,

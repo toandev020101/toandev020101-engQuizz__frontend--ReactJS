@@ -2,14 +2,14 @@ import { Box, Typography, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import * as TestApi from '../../../../apis/testApi';
+import * as NotificationApi from '../../../../apis/notificationApi';
 import RemoveDialog from '../../../../components/RemoveDialog';
 import TitlePage from '../../../../components/TitlePage';
 import { useAuthContext } from '../../../../contexts/authContext';
 import Header from './Header';
 import TableContent from './TableContent';
 
-const TestManager = () => {
+const NotificationManager = () => {
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -26,7 +26,6 @@ const TestManager = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const [reload, setReload] = useState(false);
-  const [statusFilter, setStatusFilter] = useState('all');
 
   const { isAuthenticated } = useAuthContext();
 
@@ -39,32 +38,19 @@ const TestManager = () => {
       width: 60,
     },
     {
-      label: 'Tên',
-      key: 'name',
-      numeric: false,
-      width: 200,
-    },
-    {
-      label: 'Thời gian bắt đầu',
-      key: 'start_date',
+      label: 'Tiêu đề',
+      key: 'title',
       numeric: false,
     },
     {
-      label: 'Thời gian kết thúc',
-      key: 'end_date',
+      label: 'Nội dung',
+      key: 'content',
       numeric: false,
     },
     {
-      label: 'Thời gian làm bài',
-      key: 'exam_time',
+      label: 'Học viên',
+      key: 'users',
       numeric: false,
-      width: 180,
-    },
-    {
-      label: 'Trạng thái',
-      key: 'status',
-      numeric: false,
-      width: 120,
     },
     {
       label: 'Thao tác',
@@ -80,19 +66,18 @@ const TestManager = () => {
     const getPagination = async () => {
       setIsLoading(true);
       try {
-        const res = await TestApi.getPagination({
+        const res = await NotificationApi.getPagination({
           _limit: rowsPerPage,
           _page: page,
           searchTerm,
-          status: statusFilter,
         });
 
-        const { tests, total } = res.data;
+        const { notifications, total } = res.data;
 
-        if (tests.length === 0 && page > 0) {
+        if (notifications.length === 0 && page > 0) {
           setPage((prevPage) => prevPage - 1);
         }
-        setRows(tests);
+        setRows(notifications);
         setTotal(total);
       } catch (error) {
         const { status, data } = error.response;
@@ -109,7 +94,7 @@ const TestManager = () => {
       getPagination();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, rowsPerPage, reload, isAuthenticated, navigate, statusFilter]);
+  }, [page, rowsPerPage, reload, isAuthenticated, navigate]);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -165,9 +150,9 @@ const TestManager = () => {
     try {
       let res;
       if (deleteRowIndex === -1) {
-        res = await TestApi.removeList({ ids: selectedArr });
+        res = await NotificationApi.removeList({ ids: selectedArr });
       } else {
-        res = await TestApi.removeOne(rows[deleteRowIndex].id);
+        res = await NotificationApi.removeOne(rows[deleteRowIndex].id);
       }
 
       toast.success(res.detail, {
@@ -199,8 +184,8 @@ const TestManager = () => {
 
   return (
     <Box>
-      <TitlePage title="EngQuizz - Quản lý đề thi" />
-      <Typography sx={{ marginBottom: '20px', fontSize: '18px' }}>Danh sách đề thi</Typography>
+      <TitlePage title="EngQuizz - Quản lý thông báo" />
+      <Typography sx={{ marginBottom: '20px', fontSize: '18px' }}>Danh sách thông báo</Typography>
       {/* list content */}
       <Box
         padding="20px"
@@ -221,31 +206,13 @@ const TestManager = () => {
         }}
       >
         <Header
-          searchTitle="Tìm kiếm đề thi"
           searchTerm={searchTerm}
           handleSearchChange={handleSearchChange}
-          filters={[
-            {
-              value: statusFilter,
-              label: 'Trạng thái',
-              handleChange: (e) => setStatusFilter(e.target.value),
-              options: [
-                { value: 'all', label: 'Tất cả' },
-                { value: 'Chưa mở', label: 'Chưa mở' },
-                {
-                  value: 'Đang mở',
-                  label: 'Đang mở',
-                },
-                {
-                  value: 'Đã đóng',
-                  label: 'Đã đóng',
-                },
-              ],
-            },
-          ]}
+          filters={[]}
           selectedArr={selectedArr}
           handleDeleteRowIndex={handleDeleteRowIndex}
-          addLinkTo="/quan-tri/thi-truc-tuyen/de-thi/them-moi"
+          headCells={headCells}
+          rows={rows.filter((row, index) => selectedArr.includes(row.id))}
         />
 
         <TableContent
@@ -267,11 +234,11 @@ const TestManager = () => {
         <RemoveDialog
           open={openDeleteDialog}
           onClose={handleDeleteDialogClose}
-          title={'Xác nhận xóa đề thi'}
+          title={'Xác nhận xóa thông báo'}
           content={`Bạn chắc chắn muốn xóa ${
             deleteRowIndex === -1
-              ? selectedArr.length + ' đề thi này'
-              : `đề thi "${rows[deleteRowIndex]?.name}"`
+              ? selectedArr.length + ' thông báo này'
+              : `thông báo "${rows[deleteRowIndex]?.title}"`
           } hay không?`}
           isLoading={isDeleteLoading}
           onConfirm={handleDeleteRow}
@@ -282,4 +249,4 @@ const TestManager = () => {
   );
 };
 
-export default TestManager;
+export default NotificationManager;
