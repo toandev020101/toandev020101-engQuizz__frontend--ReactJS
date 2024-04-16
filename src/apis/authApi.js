@@ -22,6 +22,26 @@ export const resendEmail = ({ userId }) => {
   return axiosClient.get(url);
 };
 
+export const refreshOTP = (data) => {
+  const url = `${BASE_LINK}/refresh-otp`;
+  return axiosClient.post(url, data);
+};
+
+export const sendOTPPassword = (data) => {
+  const url = `${BASE_LINK}/send-otp-password`;
+  return axiosClient.post(url, data);
+};
+
+export const verifyOTPPassword = (data) => {
+  const url = `${BASE_LINK}/verify-otp-password`;
+  return axiosClient.post(url, data);
+};
+
+export const forgotPassword = (data) => {
+  const url = `${BASE_LINK}/forgot-password`;
+  return axiosClient.post(url, data);
+};
+
 export const refreshToken = () => {
   const url = `${BASE_LINK}/refresh-token`;
   return axiosClient.get(url);

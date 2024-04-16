@@ -25,9 +25,11 @@ import ExamManager from './pages/admin/OnlineExamManager/ExamManager';
 import DetailLayout from './layouts/AdminLayout/DetailLayout';
 import NotificationManager from './pages/admin/OnlineExamManager/NotificationManager';
 import AddNotification from './pages/admin/OnlineExamManager/NotificationManager/AddNotification';
+import ForgotPassword from './pages/auth/ForgotPassword';
 
 export const publicRoutes = [
   // auth
+  { path: '/quen-mat-khau', component: ForgotPassword, layout: AuthLayout },
   { path: '/xac-minh-email', component: VerifyEmail, layout: AuthLayout },
   { path: '/dang-nhap', component: Login, layout: AuthLayout },
   { path: '/dang-ky', component: Register, layout: AuthLayout },

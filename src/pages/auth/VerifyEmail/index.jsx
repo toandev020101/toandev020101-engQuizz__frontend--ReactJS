@@ -52,7 +52,8 @@ const VerifyEmail = () => {
     setIsLoading(true);
     try {
       const userId = JWTManager.getUserId();
-      await AuthApi.resendEmail({ userId });
+      const res = await AuthApi.resendEmail({ userId });
+      toast.success(res.detail, { theme: 'colored', toastId: 'headerId', autoClose: 1500 });
     } catch (error) {
       const { status, data } = error.response;
       if (status === 400 || status === 404) {
