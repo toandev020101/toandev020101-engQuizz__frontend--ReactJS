@@ -43,21 +43,6 @@ const Submit = () => {
         const res = await ExamApi.getOneById(id);
         const { exam } = res.data;
         const newExam = exam;
-
-        if (!newExam.is_submitted) {
-          timeId = setTimeout(() => {
-            navigate('/de-thi', {
-              state: {
-                notify: {
-                  type: 'error',
-                  message: 'Bài thi chưa làm hoặc chưa nộp!',
-                  options: { theme: 'colored', toastId: 'authId', autoClose: 1500 },
-                },
-              },
-            });
-          }, 1000);
-        }
-
         setExam({ ...newExam });
       } catch (error) {
         const { status, data } = error.response;

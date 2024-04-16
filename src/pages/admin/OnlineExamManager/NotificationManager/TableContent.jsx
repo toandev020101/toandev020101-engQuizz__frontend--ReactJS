@@ -151,12 +151,6 @@ const TableContent = ({
                       <Box display="flex" gap="10px">
                         <Skeleton animation="wave" variant="circular">
                           <IconButton>
-                            <BiDetail />
-                          </IconButton>
-                        </Skeleton>
-
-                        <Skeleton animation="wave" variant="circular">
-                          <IconButton>
                             <BiTrashAlt />
                           </IconButton>
                         </Skeleton>
@@ -201,14 +195,6 @@ const TableContent = ({
                     ))}
                     <TableCell sx={{ fontSize: '14px' }}>
                       <Box display="flex" gap="10px">
-                        <Tooltip title="Xem chi tiết">
-                          <Link to={`/quan-tri/thi-truc-tuyen/bai-thi/${row.id}`}>
-                            <IconButton>
-                              <BiDetail style={{ color: theme.palette.info.main }} />
-                            </IconButton>
-                          </Link>
-                        </Tooltip>
-
                         <Tooltip title="Xóa">
                           <IconButton
                             onClick={(e) => {

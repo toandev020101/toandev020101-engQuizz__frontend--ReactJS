@@ -72,7 +72,7 @@ const Sidebar = () => {
       boxShadow="5px 0 5px -5px rgba(0, 0, 0, 0.05)"
     >
       {/* logo */}
-      <Link to="/" style={{ textDecoration: 'none' }}>
+      <Link to="/quan-tri" style={{ textDecoration: 'none' }}>
         <Box
           display="flex"
           justifyContent="center"

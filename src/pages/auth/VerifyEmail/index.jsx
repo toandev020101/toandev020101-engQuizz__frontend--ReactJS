@@ -9,10 +9,11 @@ import { useAuthContext } from '../../../contexts/authContext';
 import JWTManager from '../../../utils/jwt';
 
 const VerifyEmail = () => {
+  const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const { setIsAuthenticated } = useAuthContext();
+  const { setIsAuthenticated, logoutClient } = useAuthContext();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -65,7 +66,29 @@ const VerifyEmail = () => {
     setIsLoading(false);
   };
 
-  const theme = useTheme();
+  const handleLogout = async () => {
+    try {
+      const res = await AuthApi.logout();
+      logoutClient();
+      navigate('/dang-nhap', {
+        state: {
+          notify: {
+            type: 'success',
+            message: res.detail,
+            options: { theme: 'colored', toastId: 'authId', autoClose: 1500 },
+          },
+        },
+      });
+    } catch (error) {
+      const { status, data } = error.response;
+      if (status === 400 || status === 404) {
+        toast.error(data.detail, { theme: 'colored', toastId: 'headerId', autoClose: 1500 });
+      } else {
+        navigate(`/error/${status}`);
+      }
+    }
+  };
+
   return (
     <Box
       display={'flex'}
@@ -110,6 +133,14 @@ const VerifyEmail = () => {
         >
           Gửi lại liên kết
         </LoadingButton>
+        <Typography
+          marginTop={'20px'}
+          fontSize="14px"
+          sx={{ cursor: 'pointer', '&:hover': { color: theme.palette.primary.main } }}
+          onClick={handleLogout}
+        >
+          Đăng nhập bằng tài khoản khác
+        </Typography>
       </Box>
     </Box>
   );

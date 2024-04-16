@@ -12,8 +12,8 @@ import {
   useTheme,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { BiLogOut } from 'react-icons/bi';
-import { useNavigate } from 'react-router-dom';
+import { BiHome, BiLogOut } from 'react-icons/bi';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import * as AuthApi from '../../apis/authApi';
 import * as UserApi from '../../apis/userApi';
@@ -177,6 +177,11 @@ const Header = () => {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
               >
+                <Link to="/">
+                  <MenuItem onClick={handleLogout}>
+                    <BiHome fontSize="20px" style={{ marginRight: '10px' }} /> Trang chủ
+                  </MenuItem>
+                </Link>
                 <Divider />
 
                 <MenuItem onClick={handleLogout}>
