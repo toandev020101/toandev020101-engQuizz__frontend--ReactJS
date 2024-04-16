@@ -45,7 +45,7 @@ const TableContent = ({
     if (headCell.key.includes('.')) {
       const keys = headCell.key.split('.');
       if (keys[0] === 'result')
-        if (row[keys[0]] && row[keys[0]][keys[1]])
+        if (row[keys[0]] && row[keys[0]][keys[1]] !== null)
           return (
             <TableCell sx={{ fontSize: '14px' }}>
               {keys[1] === 'score'
@@ -68,7 +68,9 @@ const TableContent = ({
         </TableCell>
       );
 
-    if (headCell.key === 'is_submitted')
+    if (headCell.key === 'is_submitted') {
+      const currentDate = new Date();
+      const endDate = new Date(row.test.end_date);
       return (
         <TableCell sx={{ fontSize: '14px' }}>
           {row[headCell.key] ? (
@@ -85,6 +87,34 @@ const TableContent = ({
             >
               Đã nộp
             </Typography>
+          ) : currentDate < endDate ? (
+            <Typography
+              sx={{
+                color: theme.palette.info.main,
+                border: `1px solid ${theme.palette.info.main}`,
+                borderRadius: '3px',
+                bgcolor: '#def3ff',
+                fontSize: '14px',
+                display: 'inline-block',
+                padding: '5px 10px',
+              }}
+            >
+              Chưa nộp
+            </Typography>
+          ) : row.exam_time_at ? (
+            <Typography
+              sx={{
+                color: theme.palette.warning.main,
+                border: `1px solid ${theme.palette.warning.main}`,
+                borderRadius: '3px',
+                bgcolor: '#ffedde',
+                fontSize: '14px',
+                display: 'inline-block',
+                padding: '5px 10px',
+              }}
+            >
+              Bỏ thi
+            </Typography>
           ) : (
             <Typography
               sx={{
@@ -97,11 +127,12 @@ const TableContent = ({
                 padding: '5px 10px',
               }}
             >
-              Chưa nộp
+              Không thi
             </Typography>
           )}
         </TableCell>
       );
+    }
 
     return (
       <TableCell sx={{ fontSize: '14px' }}>
