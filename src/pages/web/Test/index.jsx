@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import * as ExamApi from '../../../apis/examApi';
 import { useAuthContext } from '../../../contexts/authContext';
-import ExamItem from './TestItem';
+import TestItem from './TestItem';
 import TitlePage from '../../../components/TitlePage';
 import LoadingPage from './../../../components/LoadingPage';
 
@@ -85,7 +85,7 @@ const Test = () => {
       ) : (
         <Box display={'grid'} gridTemplateColumns={'repeat(4, 1fr)'} gap="15px" margin="20px 0">
           {exams.map((exam, index) => (
-            <ExamItem key={`exam-item-${index}`} item={exam} />
+            <TestItem key={`exam-item-${index}`} item={exam} />
           ))}
         </Box>
       )}
