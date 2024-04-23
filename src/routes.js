@@ -23,9 +23,9 @@ import Detail from './pages/components/Detail';
 import ChangePassword from './pages/web/User/Info/ChangePassword';
 import ExamManager from './pages/admin/OnlineExamManager/ExamManager';
 import DetailLayout from './layouts/AdminLayout/DetailLayout';
-import NotificationManager from './pages/admin/OnlineExamManager/NotificationManager';
-import AddNotification from './pages/admin/OnlineExamManager/NotificationManager/AddNotification';
 import ForgotPassword from './pages/auth/ForgotPassword';
+import AddNotification from './pages/admin/NotificationManager/AddNotification';
+import NotificationManager from './pages/admin/NotificationManager/index';
 
 export const publicRoutes = [
   // auth

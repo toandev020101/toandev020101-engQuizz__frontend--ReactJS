@@ -9,15 +9,14 @@ import {
   useTheme,
 } from '@mui/material';
 import React, { Fragment, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { HiPuzzle } from 'react-icons/hi';
 import { AiOutlineDashboard } from 'react-icons/ai';
 import { BiBell, BiChevronDown, BiChevronRight, BiRadioCircle, BiUserPin } from 'react-icons/bi';
-import { PiExam } from 'react-icons/pi';
-import { LuCalendarClock, LuUserCog } from 'react-icons/lu';
 import { GrCircleQuestion } from 'react-icons/gr';
+import { HiPuzzle } from 'react-icons/hi';
 import { IoDocumentTextOutline } from 'react-icons/io5';
-import { FiUser } from 'react-icons/fi';
+import { LuCalendarClock } from 'react-icons/lu';
+import { PiExam } from 'react-icons/pi';
+import { Link, useLocation } from 'react-router-dom';
 
 const Sidebar = () => {
   const theme = useTheme();

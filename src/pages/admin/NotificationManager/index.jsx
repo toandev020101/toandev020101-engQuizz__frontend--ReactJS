@@ -2,10 +2,10 @@ import { Box, Typography, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import * as NotificationApi from '../../../../apis/notificationApi';
-import RemoveDialog from '../../../../components/RemoveDialog';
-import TitlePage from '../../../../components/TitlePage';
-import { useAuthContext } from '../../../../contexts/authContext';
+import * as NotificationApi from '../../../apis/notificationApi';
+import RemoveDialog from '../../../components/RemoveDialog';
+import TitlePage from '../../../components/TitlePage';
+import { useAuthContext } from '../../../contexts/authContext';
 import Header from './Header';
 import TableContent from './TableContent';
 

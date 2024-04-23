@@ -21,8 +21,8 @@ import {
 import React, { Fragment } from 'react';
 import { BiDetail, BiTrashAlt } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
-import * as settings from '../../../../settings';
-import JWTManager from '../../../../utils/jwt';
+import * as settings from '../../../settings';
+import JWTManager from '../../../utils/jwt';
 
 const TableContent = ({
   rows,

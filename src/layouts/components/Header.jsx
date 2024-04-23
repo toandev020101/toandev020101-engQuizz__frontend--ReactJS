@@ -307,7 +307,11 @@ const Header = () => {
                     color="secondary"
                     badgeContent={
                       notifications.filter(
-                        (notification) => !notification.notification_details[0].is_readed,
+                        (notification) =>
+                          !notification.notification_details.find(
+                            (notification_detail) =>
+                              notification_detail.user_id === JWTManager.getUserId(),
+                          )?.is_readed,
                       )?.length
                     }
                   >
@@ -377,7 +381,10 @@ const Header = () => {
                             '&:hover': { bgcolor: theme.palette.grey[200] },
                           }}
                           bgcolor={
-                            notification.notification_details[0].is_readed
+                            notification.notification_details.find(
+                              (notification_detail) =>
+                                notification_detail.user_id === JWTManager.getUserId(),
+                            )?.is_readed
                               ? 'transparent'
                               : theme.palette.grey[200]
                           }

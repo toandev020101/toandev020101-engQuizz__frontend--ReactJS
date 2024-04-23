@@ -19,8 +19,8 @@ import * as AuthApi from '../../apis/authApi';
 import * as UserApi from '../../apis/userApi';
 import ToastNotify from '../../components/ToastNotify';
 import { useAuthContext } from '../../contexts/authContext';
-import JWTManager from '../../utils/jwt';
 import * as settings from '../../settings';
+import JWTManager from '../../utils/jwt';
 
 const Header = () => {
   const theme = useTheme();
@@ -178,7 +178,7 @@ const Header = () => {
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
               >
                 <Link to="/">
-                  <MenuItem onClick={handleLogout}>
+                  <MenuItem>
                     <BiHome fontSize="20px" style={{ marginRight: '10px' }} /> Trang chủ
                   </MenuItem>
                 </Link>

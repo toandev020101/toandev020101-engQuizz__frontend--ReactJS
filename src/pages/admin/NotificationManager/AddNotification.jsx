@@ -1,19 +1,18 @@
-import { Box, Button, Divider, Typography, useTheme } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import TitlePage from '../../../../components/TitlePage';
-import InputField from '../../../../components/InputField';
-import { LoadingButton } from '@mui/lab';
-import TransferList from '../TestManager/TransferList';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import notificationSchema from './../../../../schemas/notificationSchema';
+import { LoadingButton } from '@mui/lab';
+import { Box, Button, Divider, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import * as UserApi from '../../../../apis/userApi';
-import * as NotificationApi from '../../../../apis/notificationApi';
+import * as NotificationApi from '../../../apis/notificationApi';
+import * as UserApi from '../../../apis/userApi';
+import InputField from '../../../components/InputField';
+import TitlePage from '../../../components/TitlePage';
+import TransferList from '../../../components/TransferList';
+import notificationSchema from './../../../schemas/notificationSchema';
 
 const AddNotification = () => {
-  const theme = useTheme();
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);

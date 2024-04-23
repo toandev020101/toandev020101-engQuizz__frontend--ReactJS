@@ -20,7 +20,7 @@ import * as UserApi from '../../../../apis/userApi';
 import InputField from '../../../../components/InputField';
 import TitlePage from '../../../../components/TitlePage';
 import testSchema from '../../../../schemas/testSchema';
-import TransferList from './TransferList';
+import TransferList from '../../../../components/TransferList';
 import { currentDateTime, dateTimeLocal } from '../../../../utils/format';
 import { randomArrayInRange } from '../../../../utils/random';
 
